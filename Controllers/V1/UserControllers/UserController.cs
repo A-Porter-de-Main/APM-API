@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using APMApi.Helpers;
 using APMApi.Models.Dto.UserModels.User;
 using APMApi.Services.MainUsers.UserServices;
@@ -30,6 +31,7 @@ public class UserController : ControllerBaseExtended<Models.Database.UserModels.
     #region Methods
     
     [HttpPost("login")]
+    [Authorize("visitor")]
     public async Task<IActionResult> Login(UserLoginDto userLoginDto)
     {
         return await TryExecuteControllerTask(async () =>
@@ -40,34 +42,34 @@ public class UserController : ControllerBaseExtended<Models.Database.UserModels.
     }
     
     [HttpGet("me")]
-    [Authorize("admin")]
     public async Task<IActionResult> Me()
     {
-        return await TryExecuteControllerTask(async () =>
+        return await TryExecuteControllerTask<dynamic>(async () =>
         {
-            var id = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "id")?.Value ?? throw new Exception("User id not found"));
-            return await _userService.GetById(id);
+            var id = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            if (id == null) return _userService.GenerateVisitor();
+            return await _userService.GetById(Guid.Parse(id));
         });
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize("superAdmin")]
+    [Authorize("admin")]
     public override Task<IActionResult> GetById(Guid id) => base.GetById(id);
     
     [HttpGet]
-    [Authorize("superAdmin")]
+    [Authorize("admin")]
     public override Task<IActionResult> GetAll() => base.GetAll();
-    
+
     [HttpPost]
-    [Authorize("superAdmin")]
+    [Authorize("visitor")]
     public override Task<IActionResult> Create(UserCreateDto createDto) => base.Create(createDto);
     
     [HttpPut("{id:guid}")]
-    [Authorize("superAdmin")]
+    [Authorize("admin")]
     public override Task<IActionResult> Update(Guid id, UserUpdateDto updateDto) => base.Update(id, updateDto);
     
     [HttpDelete("{id:guid}")]
-    [Authorize("superAdmin")]
+    [Authorize("admin")]
     public override Task<IActionResult> Delete(Guid id) => base.Delete(id);
 
     #endregion

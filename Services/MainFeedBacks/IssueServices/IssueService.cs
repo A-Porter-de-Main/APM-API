@@ -1,14 +1,13 @@
-using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.Role;
+using APMApi.Models.Database.FeedBackModels;
+using APMApi.Models.Dto.FeedBackModels.Issue;
 using APMApi.Models.Other;
-using APMApi.Services.MainUsers.RoleServices;
 using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainFeedBacks.IssueServices;
 
-public class IssueService : BaseService<Role, RoleCreateDto, RoleUpdateDto>, IRoleService
+public class IssueService : BaseService<Issue, IssueCreateDto, IssueUpdateDto>, IIssueService
 {
-    protected IssueService(DataContext context) : base(context) { }
-    
-    
+    public IssueService(DataContext context) : base(context)
+    {
+    }
 }

@@ -73,7 +73,7 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
     public string Password { get; set; } = null!;
     
     [Column("strip_user_id")]
-    public string? StripUserId { get; set; }
+    public Guid? StripUserId { get; set; }
     
     [Column("created_at")]
     public DateTime CreatedAt { get; init; }

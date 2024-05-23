@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace APMApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240522114339_InitialMigration")]
+    [Migration("20240522123107_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -536,8 +536,8 @@ namespace APMApi.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("phone");
 
-                    b.Property<string>("StripUserId")
-                        .HasColumnType("text")
+                    b.Property<Guid?>("StripUserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("strip_user_id");
 
                     b.Property<DateTime>("UpdatedAt")

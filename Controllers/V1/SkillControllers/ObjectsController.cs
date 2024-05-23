@@ -1,11 +1,11 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.SkillModels;
 using APMApi.Models.Dto.CategoryModels.Object;
-using APMApi.Services.Skills.ObjectServices;
+using APMApi.Services.MainSkills.ObjectServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APMApi.Controllers.V1.Skill;
+namespace APMApi.Controllers.V1.SkillControllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/objects")]

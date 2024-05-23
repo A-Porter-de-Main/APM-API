@@ -7,7 +7,7 @@ namespace APMApi.Services.MainRequests.PictureServices;
 
 public class PictureService : BaseService<Picture, PictureCreateDto, PictureUpdateDto>, IPictureService
 {
-    protected PictureService(DataContext context) : base(context) { }
+    public PictureService(DataContext context) : base(context) { }
     
     
 }

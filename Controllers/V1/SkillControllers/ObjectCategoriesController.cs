@@ -5,7 +5,7 @@ using APMApi.Services.MainSkills.ObjectCategoryServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APMApi.Controllers.V1.Skill;
+namespace APMApi.Controllers.V1.SkillControllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/objects/categories")]

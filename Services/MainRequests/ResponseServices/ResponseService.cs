@@ -7,5 +7,5 @@ namespace APMApi.Services.MainRequests.ResponseServices;
 
 public class ResponseService : BaseService<Response, ResponseCreateDto, ResponseUpdateDto>, IResponseService
 {
-    protected ResponseService(DataContext context) : base(context) { }
+    public ResponseService(DataContext context) : base(context) { }
 }

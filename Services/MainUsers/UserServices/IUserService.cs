@@ -7,4 +7,5 @@ namespace APMApi.Services.MainUsers.UserServices;
 public interface IUserService : IBaseService<Models.Database.UserModels.User, UserCreateDto, UserUpdateDto>
 {
     public Task<TokenResponse?> Login(UserLoginDto userLoginDto);
+    public TokenResponse GenerateVisitor();
 }

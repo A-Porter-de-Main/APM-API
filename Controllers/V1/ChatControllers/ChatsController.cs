@@ -1,11 +1,10 @@
 using APMApi.Helpers;
 using APMApi.Models.Dto.ChatModels.Chat;
-using APMApi.Models.Dto.FeedBackModels.Issue;
 using APMApi.Services.MainChats.ChatServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APMApi.Controllers.V1.Chat;
+namespace APMApi.Controllers.V1.ChatControllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/chats")]

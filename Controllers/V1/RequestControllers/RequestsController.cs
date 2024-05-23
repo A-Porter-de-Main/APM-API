@@ -4,7 +4,7 @@ using APMApi.Services.MainRequests.RequestServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APMApi.Controllers.V1.Request;
+namespace APMApi.Controllers.V1.RequestControllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/requests")]

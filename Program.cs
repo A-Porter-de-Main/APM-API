@@ -96,6 +96,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy("visitor", policy =>
+    {
+        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(ClaimTypes.Role, "visitor");
+    });
     options.AddPolicy("user", policy =>
     {
         policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
@@ -106,14 +112,7 @@ builder.Services.AddAuthorization(options =>
     {
         policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
         policy.RequireAuthenticatedUser();
-        // authorized for admin and superAdmin
-        policy.RequireClaim(ClaimTypes.Role, "admin", "superAdmin");
-    });
-    options.AddPolicy("superAdmin", policy =>
-    {
-        policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
-        policy.RequireAuthenticatedUser();
-        policy.RequireClaim(ClaimTypes.Role, "superAdmin");
+        policy.RequireClaim(ClaimTypes.Role, "admin");
     });
 });
 

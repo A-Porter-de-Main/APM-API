@@ -39,7 +39,7 @@ public class Request : IBaseModel<Request, RequestCreateDto, RequestUpdateDto>
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; init; }
-
+    
     [Column("description")]
     [MaxLength(250)]
     public string Description { get; set; } = null!;

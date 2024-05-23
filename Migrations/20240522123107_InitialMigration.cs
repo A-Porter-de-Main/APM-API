@@ -248,7 +248,7 @@ namespace APMApi.Migrations
                     email = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     phone = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     password = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
-                    strip_user_id = table.Column<string>(type: "text", nullable: true),
+                    strip_user_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },

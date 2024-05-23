@@ -4,7 +4,7 @@ using APMApi.Services.MainSkills.SkillServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APMApi.Controllers.V1.Skill;
+namespace APMApi.Controllers.V1.SkillControllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/skills")]

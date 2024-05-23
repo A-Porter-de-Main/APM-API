@@ -1,0 +1,72 @@
+name: Test et déploiement
+run-name: ${{ github.actor }} est en train de tester et de déployer l'application via docker
+on: [ push ]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-applications:
+    name: Build et test de l'application
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet: [7.0.x]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Restore dependencies
+        run: |
+          dotnet new nugetconfig --force
+          dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release
+  
+  test-application:
+    name: Test de l'application
+    runs-on: ubuntu-latest
+    needs: build-applications
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Test
+        run: dotnet test --verbosity normal
+  
+  build-and-push-webapi-image:
+    runs-on: ubuntu-latest
+    needs: test-application
+    name: Build et push de l'image docker
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata
+        uses: docker/metadata-action@v3
+        id: meta
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/webapi
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          context: .
+          target: final
+          platforms: linux/amd64

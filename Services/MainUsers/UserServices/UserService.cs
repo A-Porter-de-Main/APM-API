@@ -19,7 +19,7 @@ public class UserService : BaseService<Models.Database.UserModels.User, UserCrea
 
     #endregion
 
-    #region MyRegion
+    #region Constructor
 
     public UserService(DataContext context, IConfiguration configuration) : base(context)
     {
@@ -52,6 +52,33 @@ public class UserService : BaseService<Models.Database.UserModels.User, UserCrea
         {
             new Claim("id", superUser.Id.ToString()),
             new Claim("name", superUser.Email),
+            new Claim(ClaimTypes.Role, "admin")
+        };
+        
+        var token = new JwtSecurityToken(
+            _config["Jwt:Issuer"],
+            _config["Jwt:Issuer"],
+            claims,
+            expires: DateTime.Now.AddMinutes(120),
+            signingCredentials: credentials
+        );
+        
+        return new TokenResponse
+        {
+            Token = new JwtSecurityTokenHandler().WriteToken(token),
+            Expires = token.ValidTo
+        };
+    }
+
+    public TokenResponse GenerateVisitor()
+    {
+        var key = _config.GetSection("Jwt:Key").Get<string>() ?? throw new Exception("Jwt:Key not found in appsettings.json");
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Role, "visitor")
         };
         
         var token = new JwtSecurityToken(

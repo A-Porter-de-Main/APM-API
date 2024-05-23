@@ -5,7 +5,7 @@ using APMApi.Services.MainFeedBacks.IssueServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APMApi.Controllers.V1.FeedBack;
+namespace APMApi.Controllers.V1.FeedBackControllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/issues")]

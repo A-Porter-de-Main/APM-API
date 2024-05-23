@@ -1,12 +1,11 @@
 using APMApi.Helpers;
-using APMApi.Models.Database;
 using APMApi.Models.Database.UserModels;
 using APMApi.Models.Dto.UserModels.Preference;
 using APMApi.Services.MainUsers.PreferenceServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APMApi.Controllers.V1.User;
+namespace APMApi.Controllers.V1.UserControllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/preferences")]

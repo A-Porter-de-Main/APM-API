@@ -7,7 +7,7 @@ namespace APMApi.Services.MainFeedBacks.FeedBackServices;
 
 public class FeedBackService : BaseService<FeedBack, FeedBackCreateDto, FeedBackUpdateDto>, IFeedBackService
 {
-    protected FeedBackService(DataContext context) : base(context) { }
+    public FeedBackService(DataContext context) : base(context) { }
     
     
 }

@@ -7,5 +7,5 @@ namespace APMApi.Services.MainSkills.SkillServices;
 
 public class SkillService : BaseService<Skill, SkillCreateDto, SkillUpdateDto>, ISkillService
 {
-    protected SkillService(DataContext context) : base(context) { }
+    public SkillService(DataContext context) : base(context) { }
 }

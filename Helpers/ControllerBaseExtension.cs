@@ -2,7 +2,6 @@ using System.Diagnostics;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using APMApi.Models;
 using APMApi.Models.Dto;
 using APMApi.Models.Exception;
 using APMApi.Models.Other;
@@ -71,21 +70,18 @@ public class ControllerBaseExtended<T, TCreateDto, TUpdateDto, TService> : Contr
     #region Methods
     
     [HttpGet]
-    [Authorize("admin")]
     public virtual async Task<IActionResult> GetAll()
     {
         return await TryExecuteControllerTask(async () => await _service.GetAll());
     }
     
     [HttpGet("{id:guid}")]
-    [Authorize("admin")]
     public virtual async Task<IActionResult> GetById(Guid id)
     {
         return await TryExecuteControllerTask(async () => await _service.GetById(id));
     }
     
     [HttpPost]
-    [Authorize("admin")]
     public virtual  async Task<IActionResult> Create(TCreateDto createDto)
     {
         return await TryExecuteControllerTask(async () =>
@@ -96,7 +92,6 @@ public class ControllerBaseExtended<T, TCreateDto, TUpdateDto, TService> : Contr
     }
     
     [HttpPut("{id:guid}")]
-    [Authorize("admin")]
     public virtual  async Task<IActionResult> Update(Guid id, TUpdateDto updateDto)
     {
         return await TryExecuteControllerTask(async () =>
@@ -107,7 +102,6 @@ public class ControllerBaseExtended<T, TCreateDto, TUpdateDto, TService> : Contr
     }
     
     [HttpDelete("{id:guid}")]
-    [Authorize("admin")]
     public virtual async Task<IActionResult> Delete(Guid id)
     {
         return await TryExecuteControllerTask(async () => await _service.Delete(id));

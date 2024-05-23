@@ -12,7 +12,7 @@ public class BaseService<T, TCreateDto, TUpdateDto> : IBaseService<T, TCreateDto
 {
     private readonly DataContext _context;
 
-    protected BaseService(DataContext context)
+    public BaseService(DataContext context)
     {
         _context = context;
     }

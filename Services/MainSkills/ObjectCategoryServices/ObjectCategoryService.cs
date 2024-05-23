@@ -1,14 +1,13 @@
-using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.Role;
+using APMApi.Models.Database.SkillModels;
+using APMApi.Models.Dto.CategoryModels.Type;
 using APMApi.Models.Other;
-using APMApi.Services.MainUsers.RoleServices;
 using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainSkills.ObjectCategoryServices;
 
-public class ObjectCategoryService : BaseService<Role, RoleCreateDto, RoleUpdateDto>, IRoleService
+public class ObjectCategoryService : BaseService<ObjectCategory, ObjectCategoryCreateDto, ObjectCategoryUpdateDto>, IObjectCategoryService
 {
-    protected ObjectCategoryService(DataContext context) : base(context) { }
+    public ObjectCategoryService(DataContext context) : base(context) { }
     
     
 }

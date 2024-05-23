@@ -533,8 +533,8 @@ namespace APMApi.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("phone");
 
-                    b.Property<string>("StripUserId")
-                        .HasColumnType("text")
+                    b.Property<Guid?>("StripUserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("strip_user_id");
 
                     b.Property<DateTime>("UpdatedAt")
