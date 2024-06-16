@@ -7,8 +7,14 @@ public class RequestCreateDto : IDataTransferObject
     public string Description { get; set; } = null!;
     public DateTime Deadline { get; set; }
     public Guid? PictureId { get; set; }
-    
-    private class Validator:AbstractValidator<RequestCreateDto>
+
+    public async Task Validate()
+    {
+        var validator = new Validator();
+        await validator.ValidateAndThrowAsync(this);
+    }
+
+    private class Validator : AbstractValidator<RequestCreateDto>
     {
         public Validator()
         {
@@ -16,11 +22,5 @@ public class RequestCreateDto : IDataTransferObject
             RuleFor(s => s.Deadline).NotEmpty();
             RuleFor(s => s.PictureId).NotEmpty();
         }
-    }
-    
-    public async Task Validate()
-    {
-        var validator = new Validator();
-        await validator.ValidateAndThrowAsync(this);
     }
 }

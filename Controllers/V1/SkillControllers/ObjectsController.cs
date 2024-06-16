@@ -12,5 +12,7 @@ namespace APMApi.Controllers.V1.SkillControllers;
 [ApiVersion("1.0")]
 public class ObjectsController : ControllerBaseExtended<ObjectModel, ObjectCreateDto, ObjectUpdateDto, IObjectService>
 {
-    public ObjectsController(IObjectService service) : base(service) { }
+    public ObjectsController(IObjectService service) : base(service)
+    {
+    }
 }

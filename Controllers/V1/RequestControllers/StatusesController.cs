@@ -12,5 +12,7 @@ namespace APMApi.Controllers.V1.RequestControllers;
 [ApiVersion("1.0")]
 public class StatusesController : ControllerBaseExtended<Status, StatusCreateDto, StatusUpdateDto, IStatusService>
 {
-    public StatusesController(IStatusService service) : base(service) { }
+    public StatusesController(IStatusService service) : base(service)
+    {
+    }
 }

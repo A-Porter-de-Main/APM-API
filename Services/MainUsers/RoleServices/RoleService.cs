@@ -7,7 +7,7 @@ namespace APMApi.Services.MainUsers.RoleServices;
 
 public class RoleService : BaseService<Role, RoleCreateDto, RoleUpdateDto>, IRoleService
 {
-    public RoleService(DataContext context) : base(context) { }
-    
-    
+    public RoleService(DataContext context) : base(context)
+    {
+    }
 }

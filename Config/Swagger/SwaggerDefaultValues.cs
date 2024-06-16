@@ -5,7 +5,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace APMApi.Config.Swagger;
- 
+
 public class SwaggerDefaultValues : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
@@ -19,18 +19,11 @@ public class SwaggerDefaultValues : IOperationFilter
             var response = operation.Responses[responseKey];
 
             foreach (var contentType in response.Content.Keys)
-            {
                 if (responseType.ApiResponseFormats.All(x => x.MediaType != contentType))
-                {
                     response.Content.Remove(contentType);
-                }
-            }
         }
 
-        if (operation.Parameters == null)
-        {
-            return;
-        }
+        if (operation.Parameters == null) return;
 
         foreach (var parameter in operation.Parameters)
         {

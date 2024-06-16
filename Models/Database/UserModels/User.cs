@@ -12,6 +12,34 @@ namespace APMApi.Models.Database.UserModels;
 [Index(nameof(Phone), IsUnique = true)]
 public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
 {
+    [Column("id")]
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; init; }
+
+    [Column("firstname")] [MaxLength(50)] public string FirstName { get; set; } = null!;
+
+    [Column("lastname")] [MaxLength(50)] public string LastName { get; set; } = null!;
+
+    [Column("desciption")]
+    [MaxLength(250)]
+    public string? Description { get; set; }
+
+    [Column("email")] [MaxLength(250)] public string Email { get; set; } = null!;
+
+    [Column("phone")] [MaxLength(20)] public string Phone { get; set; } = null!;
+
+    [Column("password")]
+    [MaxLength(250)]
+    [JsonIgnore]
+    public string Password { get; set; } = null!;
+
+    [Column("strip_user_id")] public Guid? StripUserId { get; set; }
+
+    [Column("created_at")] public DateTime CreatedAt { get; init; }
+
+    [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+
     public static User Create(UserCreateDto userCreateDto)
     {
         return new User
@@ -26,7 +54,7 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
             UpdatedAt = DateTime.Now
         };
     }
-    
+
     public User Update(UserUpdateDto userUpdateDto)
     {
         FirstName = userUpdateDto.FirstName;
@@ -36,48 +64,9 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
         UpdatedAt = DateTime.Now;
         return this;
     }
-    
+
     public static DbSet<User> GetDbSet(DataContext context)
     {
         return context.Users;
     }
-    
-    [Column("id")]
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; init; }
-    
-    [Column("firstname")]
-    [MaxLength(50)]
-    public string FirstName { get; set; } = null!;
-    
-    [Column("lastname")]
-    [MaxLength(50)]
-    public string LastName { get; set; } = null!;
-    
-    [Column("desciption")]
-    [MaxLength(250)]
-    public string? Description { get; set; }
-    
-    [Column("email")]
-    [MaxLength(250)]
-    public string Email { get; set; } = null!;
-    
-    [Column("phone")]
-    [MaxLength(20)]
-    public string Phone { get; set; } = null!;
-    
-    [Column("password")]
-    [MaxLength(250)]
-    [JsonIgnore]
-    public string Password { get; set; } = null!;
-    
-    [Column("strip_user_id")]
-    public Guid? StripUserId { get; set; }
-    
-    [Column("created_at")]
-    public DateTime CreatedAt { get; init; }
-    
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; }
 }

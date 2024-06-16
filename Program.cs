@@ -1,22 +1,25 @@
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
+using APMApi;
+using APMApi.Config.Swagger;
+using APMApi.Helpers;
+using APMApi.Models.Other;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using APMApi;
-using APMApi.Config.Swagger;
-using APMApi.Helpers;
-using APMApi.Models;
-using APMApi.Models.Other;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var issuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>() ?? throw new Exception("Jwt:Issuer not found in appsettings.json");
-var audience = builder.Configuration.GetSection("Jwt:Audience").Get<string>() ?? throw new Exception("Jwt:Audience not found in appsettings.json");
-var key = builder.Configuration.GetSection("Jwt:Key").Get<string>() ?? throw new Exception("Jwt:Key not found in appsettings.json");
+var issuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>() ??
+             throw new Exception("Jwt:Issuer not found in appsettings.json");
+var audience = builder.Configuration.GetSection("Jwt:Audience").Get<string>() ??
+               throw new Exception("Jwt:Audience not found in appsettings.json");
+var key = builder.Configuration.GetSection("Jwt:Key").Get<string>() ??
+          throw new Exception("Jwt:Key not found in appsettings.json");
 
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -31,8 +34,8 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .SetIsOriginAllowed(_ => true)
             .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-        )
-    );
+    )
+);
 
 // Add DbContext
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -66,8 +69,8 @@ builder.Services.AddSwaggerGen(options =>
             {
                 Reference = new OpenApiReference
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 }
             },
             Array.Empty<string>()
@@ -76,12 +79,22 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Configuration
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
+    .AddJsonFile("appsettings.json", false, true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                if (context.Request.Cookies.ContainsKey("dXNlclRva2Vu"))
+                    context.Token = context.Request.Cookies["dXNlclRva2Vu"];
+
+                return Task.CompletedTask;
+            }
+        };
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -136,7 +149,7 @@ app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
     var descriptions = app.DescribeApiVersions();
-    
+
     foreach (var description in descriptions)
     {
         var baseUrl = $"/swagger/{description.GroupName}/swagger.json";

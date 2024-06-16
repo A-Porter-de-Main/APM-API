@@ -9,6 +9,21 @@ namespace APMApi.Models.Database.SkillModels;
 [Table("ObjectCategories")]
 public class ObjectCategory : IBaseModel<ObjectCategory, ObjectCategoryCreateDto, ObjectCategoryUpdateDto>
 {
+    [Column("id")]
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; init; }
+
+    [Column("name")] [MaxLength(50)] public string Name { get; set; } = null!;
+
+    [Column("description")]
+    [MaxLength(250)]
+    public string Description { get; set; } = null!;
+
+    [Column("created_at")] public DateTime CreatedAt { get; init; }
+
+    [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+
     public static ObjectCategory Create(ObjectCategoryCreateDto createDto)
     {
         return new ObjectCategory
@@ -32,23 +47,4 @@ public class ObjectCategory : IBaseModel<ObjectCategory, ObjectCategoryCreateDto
     {
         return context.Types;
     }
-    
-    [Column("id")]
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; init; }
-    
-    [Column("name")]
-    [MaxLength(50)]
-    public string Name { get; set; } = null!;
-    
-    [Column("description")]
-    [MaxLength(250)]
-    public string Description { get; set; } = null!;
-    
-    [Column("created_at")]
-    public DateTime CreatedAt { get; init; }
-    
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; }
 }

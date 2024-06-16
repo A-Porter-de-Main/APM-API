@@ -12,5 +12,7 @@ namespace APMApi.Controllers.V1.ChatControllers;
 [ApiVersion("1.0")]
 public class MessagesController : ControllerBaseExtended<Message, MessageCreateDto, MessageUpdateDto, IMessageService>
 {
-    public MessagesController(IMessageService service) : base(service) { }
+    public MessagesController(IMessageService service) : base(service)
+    {
+    }
 }

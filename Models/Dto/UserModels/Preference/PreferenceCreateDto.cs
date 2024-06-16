@@ -6,9 +6,15 @@ public class PreferenceCreateDto : IDataTransferObject
 {
     public bool ByMail { get; set; }
     public bool ByNotifications { get; set; }
-    public bool ByPhone { get; set; }    
-    
-    private class Validator:AbstractValidator<PreferenceCreateDto>
+    public bool ByPhone { get; set; }
+
+    public async Task Validate()
+    {
+        var validator = new Validator();
+        await validator.ValidateAndThrowAsync(this);
+    }
+
+    private class Validator : AbstractValidator<PreferenceCreateDto>
     {
         public Validator()
         {
@@ -16,11 +22,5 @@ public class PreferenceCreateDto : IDataTransferObject
             RuleFor(s => s.ByNotifications).NotEmpty();
             RuleFor(s => s.ByPhone).NotEmpty();
         }
-    }
-    
-    public async Task Validate()
-    {
-        var validator = new Validator();
-        await validator.ValidateAndThrowAsync(this);
     }
 }

@@ -7,7 +7,7 @@ namespace APMApi.Services.MainSkills.ObjectServices;
 
 public class ObjectService : BaseService<ObjectModel, ObjectCreateDto, ObjectUpdateDto>, IObjectService
 {
-    public ObjectService(DataContext context) : base(context) { }
-    
-    
+    public ObjectService(DataContext context) : base(context)
+    {
+    }
 }

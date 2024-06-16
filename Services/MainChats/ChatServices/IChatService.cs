@@ -4,4 +4,6 @@ using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainChats.ChatServices;
 
-public interface IChatService : IBaseService<Chat, ChatCreateDto, ChatUpdateDto> { }
+public interface IChatService : IBaseService<Chat, ChatCreateDto, ChatUpdateDto>
+{
+}

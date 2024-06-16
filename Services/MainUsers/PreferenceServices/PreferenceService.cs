@@ -7,7 +7,7 @@ namespace APMApi.Services.MainUsers.PreferenceServices;
 
 public class PreferenceService : BaseService<Preference, PreferenceCreateDto, PreferenceUpdateDto>, IPreferenceService
 {
-    public PreferenceService(DataContext context) : base(context) { }
-    
-    
+    public PreferenceService(DataContext context) : base(context)
+    {
+    }
 }

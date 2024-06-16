@@ -4,4 +4,7 @@ using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainFeedBacks.FeedBackApplicationServices;
 
-public interface IFeedBackApplicationService : IBaseService<FeedBackApplication, FeedBackApplicationCreateDto, FeedBackApplicationUpdateDto> { }
+public interface IFeedBackApplicationService : IBaseService<FeedBackApplication, FeedBackApplicationCreateDto,
+    FeedBackApplicationUpdateDto>
+{
+}

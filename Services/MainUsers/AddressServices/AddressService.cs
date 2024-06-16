@@ -7,7 +7,7 @@ namespace APMApi.Services.MainUsers.AddressServices;
 
 public class AddressService : BaseService<Address, AddressCreateDto, AddressUpdateDto>, IAddressService
 {
-    public AddressService(DataContext context) : base(context) { }
-    
-    
+    public AddressService(DataContext context) : base(context)
+    {
+    }
 }

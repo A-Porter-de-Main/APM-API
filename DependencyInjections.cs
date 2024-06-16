@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Options;
 using APMApi.Config.Swagger;
 using APMApi.Services.MainChats.ChatServices;
 using APMApi.Services.MainChats.MessageServices;
@@ -17,6 +16,7 @@ using APMApi.Services.MainUsers.PreferenceServices;
 using APMApi.Services.MainUsers.RoleServices;
 using APMApi.Services.MainUsers.UserServices;
 using APMApi.Services.Other.FileServices;
+using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace APMApi;
@@ -27,22 +27,22 @@ public static class DependencyInjections
     {
         services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
         services.AddScoped<IFileService, FileService>();
-        
+
         // user services
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IPreferenceService, PreferenceService>();
         services.AddScoped<IAddressService, AddressService>();
-        
+
         // chat services
         services.AddScoped<IChatService, ChatService>();
         services.AddScoped<IMessageService, MessageService>();
-        
+
         // feedback services
         services.AddScoped<IFeedBackService, FeedBackService>();
         services.AddScoped<IFeedBackApplicationService, FeedBackApplicationService>();
         services.AddScoped<IIssueService, IssueService>();
-        
+
         // skill services
         services.AddScoped<ISkillService, SkillService>();
         services.AddScoped<IObjectService, ObjectService>();

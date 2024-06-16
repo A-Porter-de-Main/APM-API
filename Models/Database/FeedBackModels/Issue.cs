@@ -9,6 +9,19 @@ namespace APMApi.Models.Database.FeedBackModels;
 [Table("Issues")]
 public class Issue : IBaseModel<Issue, IssueCreateDto, IssueUpdateDto>
 {
+    [Column("id")]
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; init; }
+
+    [Column("description")]
+    [MaxLength(250)]
+    public string Description { get; set; } = null!;
+
+    [Column("created_at")] public DateTime CreatedAt { get; init; }
+
+    [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+
     public static Issue Create(IssueCreateDto createDto)
     {
         return new Issue
@@ -30,19 +43,4 @@ public class Issue : IBaseModel<Issue, IssueCreateDto, IssueUpdateDto>
     {
         return context.Issues;
     }
-    
-    [Column("id")]
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; init; }
-
-    [Column("description")]
-    [MaxLength(250)]
-    public string Description { get; set; } = null!;
-    
-    [Column("created_at")]
-    public DateTime CreatedAt { get; init; }
-    
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; }
 }

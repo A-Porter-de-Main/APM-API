@@ -10,7 +10,10 @@ namespace APMApi.Controllers.V1.SkillControllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/objects/categories")]
 [ApiVersion("1.0")]
-public class ObjectCategoriesController : ControllerBaseExtended<ObjectCategory, ObjectCategoryCreateDto, ObjectCategoryUpdateDto, IObjectCategoryService>
+public class ObjectCategoriesController : ControllerBaseExtended<ObjectCategory, ObjectCategoryCreateDto,
+    ObjectCategoryUpdateDto, IObjectCategoryService>
 {
-    public ObjectCategoriesController(IObjectCategoryService service) : base(service) { }
+    public ObjectCategoriesController(IObjectCategoryService service) : base(service)
+    {
+    }
 }

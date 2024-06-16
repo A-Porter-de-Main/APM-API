@@ -10,8 +10,14 @@ public class AddressCreateDto : IDataTransferObject
     public string ZipCode { get; set; } = null!;
     public string Latitude { get; set; } = null!;
     public string Longitude { get; set; } = null!;
-    
-    private class Validator:AbstractValidator<AddressCreateDto>
+
+    public async Task Validate()
+    {
+        var validator = new Validator();
+        await validator.ValidateAndThrowAsync(this);
+    }
+
+    private class Validator : AbstractValidator<AddressCreateDto>
     {
         public Validator()
         {
@@ -22,11 +28,5 @@ public class AddressCreateDto : IDataTransferObject
             RuleFor(s => s.Latitude).NotEmpty().MaximumLength(50);
             RuleFor(s => s.Longitude).NotEmpty().MaximumLength(50);
         }
-    }
-    
-    public async Task Validate()
-    {
-        var validator = new Validator();
-        await validator.ValidateAndThrowAsync(this);
     }
 }

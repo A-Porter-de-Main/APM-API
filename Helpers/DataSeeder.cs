@@ -5,24 +5,24 @@ namespace APMApi.Helpers;
 
 public class DataSeeder
 {
-    #region Fields
-    
-    private readonly ModelBuilder _modelBuilder;
-    private List<User> _users = new();
-    
-    #endregion
-    
     #region Constructor
-    
+
     public DataSeeder(ModelBuilder modelBuilder)
     {
         _modelBuilder = modelBuilder;
     }
-    
+
     #endregion
-    
+
+    #region Fields
+
+    private readonly ModelBuilder _modelBuilder;
+    private readonly List<User> _users = new();
+
+    #endregion
+
     #region Methods
-    
+
     private void GenerateUsers()
     {
         for (var i = 0; i < 10; i++)
@@ -34,13 +34,14 @@ public class DataSeeder
             };
             _users.Add(user);
         }
+
         _modelBuilder.Entity<User>().HasData(_users);
     }
-    
+
     public void Seed()
     {
         GenerateUsers();
     }
-    
+
     #endregion
 }

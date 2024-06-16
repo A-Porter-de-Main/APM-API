@@ -12,5 +12,7 @@ namespace APMApi.Controllers.V1.FeedBackControllers;
 [ApiVersion("1.0")]
 public class IssuesController : ControllerBaseExtended<Issue, IssueCreateDto, IssueUpdateDto, IIssueService>
 {
-    public IssuesController(IIssueService service) : base(service) { }
+    public IssuesController(IIssueService service) : base(service)
+    {
+    }
 }

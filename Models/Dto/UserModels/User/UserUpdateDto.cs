@@ -8,8 +8,14 @@ public class UserUpdateDto : IDataTransferObject
     public string LastName { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Phone { get; set; } = null!;
-    
-    private class Validator:AbstractValidator<UserUpdateDto>
+
+    public async Task Validate()
+    {
+        var validator = new Validator();
+        await validator.ValidateAndThrowAsync(this);
+    }
+
+    private class Validator : AbstractValidator<UserUpdateDto>
     {
         public Validator()
         {
@@ -18,11 +24,5 @@ public class UserUpdateDto : IDataTransferObject
             RuleFor(s => s.Email).NotEmpty().MaximumLength(250);
             RuleFor(s => s.Phone).NotEmpty().MaximumLength(20);
         }
-    }
-    
-    public async Task Validate()
-    {
-        var validator = new Validator();
-        await validator.ValidateAndThrowAsync(this);
     }
 }

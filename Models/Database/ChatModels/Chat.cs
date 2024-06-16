@@ -9,6 +9,13 @@ namespace APMApi.Models.Database.ChatModels;
 [Table("Chats")]
 public class Chat : IBaseModel<Chat, ChatCreateDto, ChatUpdateDto>
 {
+    [Column("id")]
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; init; }
+
+    [Column("created_at")] public DateTime CreatedAt { get; init; }
+
     public static Chat Create(ChatCreateDto createDto)
     {
         return new Chat
@@ -26,12 +33,4 @@ public class Chat : IBaseModel<Chat, ChatCreateDto, ChatUpdateDto>
     {
         return context.Chats;
     }
-    
-    [Column("id")]
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; init; }
-    
-    [Column("created_at")]
-    public DateTime CreatedAt { get; init; }
 }

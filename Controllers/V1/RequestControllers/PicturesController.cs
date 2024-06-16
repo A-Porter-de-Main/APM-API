@@ -12,5 +12,7 @@ namespace APMApi.Controllers.V1.RequestControllers;
 [ApiVersion("1.0")]
 public class PicturesController : ControllerBaseExtended<Picture, PictureCreateDto, PictureUpdateDto, IPictureService>
 {
-    public PicturesController(IPictureService service) : base(service) { }
+    public PicturesController(IPictureService service) : base(service)
+    {
+    }
 }

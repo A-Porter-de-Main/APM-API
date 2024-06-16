@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using APMApi.Helpers;
+using APMApi.Models.Database.UserModels;
 using APMApi.Models.Dto.UserModels.User;
 using APMApi.Services.MainUsers.UserServices;
 using Asp.Versioning;
@@ -11,7 +11,7 @@ namespace APMApi.Controllers.V1.UserControllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/users")]
 [ApiVersion("1.0")]
-public class UserController : ControllerBaseExtended<Models.Database.UserModels.User, UserCreateDto, UserUpdateDto, IUserService>
+public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUpdateDto, IUserService>
 {
     #region Fields
 
@@ -29,7 +29,7 @@ public class UserController : ControllerBaseExtended<Models.Database.UserModels.
     #endregion
 
     #region Methods
-    
+
     [HttpPost("login")]
     [Authorize("visitor")]
     public async Task<IActionResult> Login(UserLoginDto userLoginDto)
@@ -37,40 +37,60 @@ public class UserController : ControllerBaseExtended<Models.Database.UserModels.
         return await TryExecuteControllerTask(async () =>
         {
             await ValidateDto(userLoginDto);
-            return await _userService.Login(userLoginDto);
+            var userToken = await _userService.Login(userLoginDto);
+            if (userToken == null) return null;
+            HttpContext.Response.Cookies.Append("dXNlclRva2Vu", userToken.Token);
+            return userToken;
         });
     }
-    
+
     [HttpGet("me")]
     public async Task<IActionResult> Me()
     {
         return await TryExecuteControllerTask<dynamic>(async () =>
         {
             var id = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-            if (id == null) return _userService.GenerateVisitor();
-            return await _userService.GetById(Guid.Parse(id));
+            if (id != null) return await _userService.GetById(Guid.Parse(id));
+            var visitorToken = _userService.GenerateVisitor();
+            HttpContext.Response.Cookies.Append("dXNlclRva2Vu", visitorToken.Token);
+            return visitorToken;
         });
     }
 
     [HttpGet("{id:guid}")]
     [Authorize("admin")]
-    public override Task<IActionResult> GetById(Guid id) => base.GetById(id);
-    
+    public override Task<IActionResult> GetById(Guid id)
+    {
+        return base.GetById(id);
+    }
+
     [HttpGet]
     [Authorize("admin")]
-    public override Task<IActionResult> GetAll() => base.GetAll();
+    public override Task<IActionResult> GetAll()
+    {
+        return base.GetAll();
+    }
 
     [HttpPost]
     [Authorize("visitor")]
-    public override Task<IActionResult> Create(UserCreateDto createDto) => base.Create(createDto);
-    
+    public override Task<IActionResult> Create(UserCreateDto createDto)
+    {
+        return base.Create(createDto);
+    }
+
     [HttpPut("{id:guid}")]
     [Authorize("admin")]
-    public override Task<IActionResult> Update(Guid id, UserUpdateDto updateDto) => base.Update(id, updateDto);
-    
+    public override Task<IActionResult> Update(Guid id, UserUpdateDto updateDto)
+    {
+        return base.Update(id, updateDto);
+    }
+
     [HttpDelete("{id:guid}")]
     [Authorize("admin")]
-    public override Task<IActionResult> Delete(Guid id) => base.Delete(id);
+    public override Task<IActionResult> Delete(Guid id)
+    {
+        return base.Delete(id);
+    }
 
     #endregion
 }

@@ -12,5 +12,7 @@ namespace APMApi.Controllers.V1.UserControllers;
 [ApiVersion("1.0")]
 public class RolesController : ControllerBaseExtended<Role, RoleCreateDto, RoleUpdateDto, IRoleService>
 {
-    public RolesController(IRoleService service) : base(service) { }
+    public RolesController(IRoleService service) : base(service)
+    {
+    }
 }

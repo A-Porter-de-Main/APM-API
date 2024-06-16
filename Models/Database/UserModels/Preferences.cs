@@ -9,6 +9,21 @@ namespace APMApi.Models.Database.UserModels;
 [Table("Preferences")]
 public class Preference : IBaseModel<Preference, PreferenceCreateDto, PreferenceUpdateDto>
 {
+    [Column("id")]
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; init; }
+
+    [Column("by_mail")] public bool ByMail { get; set; }
+
+    [Column("by_notifications")] public bool ByNotifications { get; set; }
+
+    [Column("by_phone")] public bool ByPhone { get; set; }
+
+    [Column("created_at")] public DateTime CreatedAt { get; init; }
+
+    [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+
     public static Preference Create(PreferenceCreateDto createDto)
     {
         return new Preference
@@ -34,24 +49,4 @@ public class Preference : IBaseModel<Preference, PreferenceCreateDto, Preference
     {
         return context.Preferences;
     }
-    
-    [Column("id")]
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; init; }
-    
-    [Column("by_mail")]
-    public bool ByMail { get; set; }
-    
-    [Column("by_notifications")]
-    public bool ByNotifications { get; set; }
-    
-    [Column("by_phone")]
-    public bool ByPhone { get; set; }
-    
-    [Column("created_at")]
-    public DateTime CreatedAt { get; init; }
-    
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; }
 }

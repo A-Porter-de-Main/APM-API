@@ -9,6 +9,21 @@ namespace APMApi.Models.Database.RequestModels;
 [Table("Pictures")]
 public class Picture : IBaseModel<Picture, PictureCreateDto, PictureUpdateDto>
 {
+    [Column("id")]
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; init; }
+
+    [Column("path")] [MaxLength(250)] public string Path { get; set; } = null!;
+
+    [Column("description")]
+    [MaxLength(250)]
+    public string? Description { get; set; }
+
+    [Column("created_at")] public DateTime CreatedAt { get; init; }
+
+    [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+
     public static Picture Create(PictureCreateDto createDto)
     {
         return new Picture
@@ -32,23 +47,4 @@ public class Picture : IBaseModel<Picture, PictureCreateDto, PictureUpdateDto>
     {
         return context.Pictures;
     }
-    
-    [Column("id")]
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; init; }
-    
-    [Column("path")]
-    [MaxLength(250)]
-    public string Path { get; set; } = null!;
-    
-    [Column("description")]
-    [MaxLength(250)]
-    public string? Description { get; set; }
-    
-    [Column("created_at")]
-    public DateTime CreatedAt { get; init; }
-    
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; }
 }

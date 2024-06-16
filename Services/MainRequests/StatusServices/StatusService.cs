@@ -7,7 +7,7 @@ namespace APMApi.Services.MainRequests.StatusServices;
 
 public class StatusService : BaseService<Status, StatusCreateDto, StatusUpdateDto>, IStatusService
 {
-    public StatusService(DataContext context) : base(context) { }
-    
-    
+    public StatusService(DataContext context) : base(context)
+    {
+    }
 }

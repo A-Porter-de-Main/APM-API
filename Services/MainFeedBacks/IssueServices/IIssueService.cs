@@ -4,4 +4,6 @@ using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainFeedBacks.IssueServices;
 
-public interface IIssueService : IBaseService<Issue, IssueCreateDto, IssueUpdateDto> { }
+public interface IIssueService : IBaseService<Issue, IssueCreateDto, IssueUpdateDto>
+{
+}

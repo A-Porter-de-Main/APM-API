@@ -10,7 +10,10 @@ namespace APMApi.Controllers.V1.FeedBackControllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/feedbacks/application")]
 [ApiVersion("1.0")]
-public class FeedBacksApplicationController : ControllerBaseExtended<FeedBackApplication, FeedBackApplicationCreateDto, FeedBackApplicationUpdateDto, IFeedBackApplicationService>
+public class FeedBacksApplicationController : ControllerBaseExtended<FeedBackApplication, FeedBackApplicationCreateDto,
+    FeedBackApplicationUpdateDto, IFeedBackApplicationService>
 {
-    public FeedBacksApplicationController(IFeedBackApplicationService service) : base(service) { }
+    public FeedBacksApplicationController(IFeedBackApplicationService service) : base(service)
+    {
+    }
 }

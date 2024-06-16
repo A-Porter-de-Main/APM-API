@@ -4,4 +4,6 @@ using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainRequests.RequestServices;
 
-public interface IRequestService : IBaseService<Request, RequestCreateDto, RequestUpdateDto> { }
+public interface IRequestService : IBaseService<Request, RequestCreateDto, RequestUpdateDto>
+{
+}

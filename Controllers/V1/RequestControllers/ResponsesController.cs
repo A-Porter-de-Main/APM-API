@@ -10,7 +10,10 @@ namespace APMApi.Controllers.V1.RequestControllers;
 [ApiController]
 [Route("api/v{version:apiVersion}/responses")]
 [ApiVersion("1.0")]
-public class ResponsesController : ControllerBaseExtended<Response, ResponseCreateDto, ResponseUpdateDto, IResponseService>
+public class
+    ResponsesController : ControllerBaseExtended<Response, ResponseCreateDto, ResponseUpdateDto, IResponseService>
 {
-    public ResponsesController(IResponseService service) : base(service) { }
+    public ResponsesController(IResponseService service) : base(service)
+    {
+    }
 }

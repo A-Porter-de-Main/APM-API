@@ -4,4 +4,6 @@ using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainChats.MessageServices;
 
-public interface IMessageService : IBaseService<Message, MessageCreateDto, MessageUpdateDto> { }
+public interface IMessageService : IBaseService<Message, MessageCreateDto, MessageUpdateDto>
+{
+}

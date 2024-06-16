@@ -7,8 +7,14 @@ public class MessageCreateDto : IDataTransferObject
     public string Content { get; set; } = null!;
     public Guid ChatId { get; set; }
     public Guid UserId { get; set; }
-    
-    private class Validator:AbstractValidator<MessageCreateDto>
+
+    public async Task Validate()
+    {
+        var validator = new Validator();
+        await validator.ValidateAndThrowAsync(this);
+    }
+
+    private class Validator : AbstractValidator<MessageCreateDto>
     {
         public Validator()
         {
@@ -16,11 +22,5 @@ public class MessageCreateDto : IDataTransferObject
             RuleFor(s => s.ChatId).NotEmpty();
             RuleFor(s => s.UserId).NotEmpty();
         }
-    }
-    
-    public async Task Validate()
-    {
-        var validator = new Validator();
-        await validator.ValidateAndThrowAsync(this);
     }
 }

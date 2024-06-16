@@ -7,7 +7,7 @@ namespace APMApi.Services.MainChats.MessageServices;
 
 public class MessageService : BaseService<Message, MessageCreateDto, MessageUpdateDto>, IMessageService
 {
-    public MessageService(DataContext context) : base(context) { }
-    
-    
+    public MessageService(DataContext context) : base(context)
+    {
+    }
 }

@@ -4,4 +4,6 @@ using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainRequests.StatusServices;
 
-public interface IStatusService : IBaseService<Status, StatusCreateDto, StatusUpdateDto> { }
+public interface IStatusService : IBaseService<Status, StatusCreateDto, StatusUpdateDto>
+{
+}

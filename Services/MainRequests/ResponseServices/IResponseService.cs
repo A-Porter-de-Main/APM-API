@@ -4,4 +4,6 @@ using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainRequests.ResponseServices;
 
-public interface IResponseService : IBaseService<Response, ResponseCreateDto, ResponseUpdateDto> { }
+public interface IResponseService : IBaseService<Response, ResponseCreateDto, ResponseUpdateDto>
+{
+}

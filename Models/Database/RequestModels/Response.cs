@@ -9,6 +9,21 @@ namespace APMApi.Models.Database.RequestModels;
 [Table("Responses")]
 public class Response : IBaseModel<Response, ResponseCreateDto, ResponseUpdateDto>
 {
+    [Column("id")]
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; init; }
+
+    [Column("content")] [MaxLength(250)] public string Description { get; set; } = null!;
+
+    [Column("request_id")] public Guid RequestId { get; set; }
+
+    [Column("user_id")] public Guid UserId { get; set; }
+
+    [Column("created_at")] public DateTime CreatedAt { get; init; }
+
+    [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+
     public static Response Create(ResponseCreateDto createDto)
     {
         return new Response
@@ -17,7 +32,7 @@ public class Response : IBaseModel<Response, ResponseCreateDto, ResponseUpdateDt
             RequestId = createDto.RequestId,
             UserId = createDto.UserId,
             CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
         };
     }
 
@@ -32,25 +47,4 @@ public class Response : IBaseModel<Response, ResponseCreateDto, ResponseUpdateDt
     {
         return context.Responses;
     }
-    
-    [Column("id")]
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; init; }
-
-    [Column("content")] 
-    [MaxLength(250)]
-    public string Description { get; set; } = null!;
-    
-    [Column("request_id")]
-    public Guid RequestId { get; set; }
-    
-    [Column("user_id")]
-    public Guid UserId { get; set; }
-    
-    [Column("created_at")]
-    public DateTime CreatedAt { get; init; }
-    
-    [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; }
 }

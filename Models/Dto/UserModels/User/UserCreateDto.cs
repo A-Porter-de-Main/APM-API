@@ -9,8 +9,14 @@ public class UserCreateDto : IDataTransferObject
     public string Email { get; set; } = null!;
     public string Phone { get; set; } = null!;
     public string Password { get; set; } = null!;
-    
-    private class Validator:AbstractValidator<UserCreateDto>
+
+    public async Task Validate()
+    {
+        var validator = new Validator();
+        await validator.ValidateAndThrowAsync(this);
+    }
+
+    private class Validator : AbstractValidator<UserCreateDto>
     {
         public Validator()
         {
@@ -20,11 +26,5 @@ public class UserCreateDto : IDataTransferObject
             RuleFor(s => s.Phone).NotEmpty().MaximumLength(20);
             RuleFor(s => s.Password).NotEmpty().MaximumLength(250);
         }
-    }
-    
-    public async Task Validate()
-    {
-        var validator = new Validator();
-        await validator.ValidateAndThrowAsync(this);
     }
 }

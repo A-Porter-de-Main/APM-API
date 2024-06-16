@@ -4,4 +4,6 @@ using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainUsers.PreferenceServices;
 
-public interface IPreferenceService : IBaseService<Preference, PreferenceCreateDto, PreferenceUpdateDto> { }
+public interface IPreferenceService : IBaseService<Preference, PreferenceCreateDto, PreferenceUpdateDto>
+{
+}

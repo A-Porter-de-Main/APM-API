@@ -2,12 +2,19 @@ using FluentValidation;
 
 namespace APMApi.Models.Dto.RequestModels.Request;
 
-public class RequestUpdateDto : IDataTransferObject {
+public class RequestUpdateDto : IDataTransferObject
+{
     public string Description { get; set; } = null!;
     public DateTime Deadline { get; set; }
     public Guid? PictureId { get; set; }
-    
-    private class Validator:AbstractValidator<RequestUpdateDto>
+
+    public async Task Validate()
+    {
+        var validator = new Validator();
+        await validator.ValidateAndThrowAsync(this);
+    }
+
+    private class Validator : AbstractValidator<RequestUpdateDto>
     {
         public Validator()
         {
@@ -15,11 +22,5 @@ public class RequestUpdateDto : IDataTransferObject {
             RuleFor(s => s.Deadline).NotEmpty();
             RuleFor(s => s.PictureId).NotEmpty();
         }
-    }
-    
-    public async Task Validate()
-    {
-        var validator = new Validator();
-        await validator.ValidateAndThrowAsync(this);
     }
 }

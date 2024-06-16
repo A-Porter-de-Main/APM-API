@@ -12,5 +12,7 @@ namespace APMApi.Controllers.V1.UserControllers;
 [ApiVersion("1.0")]
 public class AddressesController : ControllerBaseExtended<Address, AddressCreateDto, AddressUpdateDto, IAddressService>
 {
-    public AddressesController(IAddressService service) : base(service) { }
+    public AddressesController(IAddressService service) : base(service)
+    {
+    }
 }

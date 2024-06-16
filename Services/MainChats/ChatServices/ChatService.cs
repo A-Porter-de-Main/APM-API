@@ -7,5 +7,7 @@ namespace APMApi.Services.MainChats.ChatServices;
 
 public class ChatService : BaseService<Chat, ChatCreateDto, ChatUpdateDto>, IChatService
 {
-    public ChatService(DataContext context) : base(context) { }
+    public ChatService(DataContext context) : base(context)
+    {
+    }
 }

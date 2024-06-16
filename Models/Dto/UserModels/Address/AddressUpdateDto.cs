@@ -2,15 +2,22 @@ using FluentValidation;
 
 namespace APMApi.Models.Dto.UserModels.Address;
 
-public class AddressUpdateDto : IDataTransferObject {
+public class AddressUpdateDto : IDataTransferObject
+{
     public string Street { get; set; } = null!;
     public string? Floor { get; set; }
     public string City { get; set; } = null!;
     public string ZipCode { get; set; } = null!;
     public string Latitude { get; set; } = null!;
     public string Longitude { get; set; } = null!;
-    
-    private class Validator:AbstractValidator<AddressUpdateDto>
+
+    public async Task Validate()
+    {
+        var validator = new Validator();
+        await validator.ValidateAndThrowAsync(this);
+    }
+
+    private class Validator : AbstractValidator<AddressUpdateDto>
     {
         public Validator()
         {
@@ -21,11 +28,5 @@ public class AddressUpdateDto : IDataTransferObject {
             RuleFor(s => s.Latitude).NotEmpty().MaximumLength(50);
             RuleFor(s => s.Longitude).NotEmpty().MaximumLength(50);
         }
-    }
-    
-    public async Task Validate()
-    {
-        var validator = new Validator();
-        await validator.ValidateAndThrowAsync(this);
     }
 }

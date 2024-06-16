@@ -1,11 +1,10 @@
 using System.Diagnostics;
-using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using APMApi.Models.Dto;
 using APMApi.Models.Exception;
 using APMApi.Models.Other;
 using APMApi.Services.Other.BaseServices;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace APMApi.Helpers;
 
@@ -20,14 +19,14 @@ public class ControllerBaseExtended<T, TCreateDto, TUpdateDto, TService> : Contr
     private readonly TService _service;
 
     #endregion
-    
+
     #region Constructor
-    
+
     public ControllerBaseExtended(TService service)
     {
         _service = service;
     }
-    
+
     #endregion
 
     #region Helpers
@@ -58,7 +57,16 @@ public class ControllerBaseExtended<T, TCreateDto, TUpdateDto, TService> : Contr
             return StatusCode(500, "Internal Server Error");
         }
     }
-    
+
+    protected string ParseSqlExceptionMessage(Exception e)
+    {
+        var message = e.Message;
+        if (e.InnerException == null) return message;
+        message = e.InnerException.Message;
+        if (e.InnerException.InnerException != null) message = e.InnerException.InnerException.Message;
+        return message;
+    }
+
     protected async Task<IDataTransferObject> ValidateDto(IDataTransferObject dto)
     {
         await dto.Validate();
@@ -66,23 +74,23 @@ public class ControllerBaseExtended<T, TCreateDto, TUpdateDto, TService> : Contr
     }
 
     #endregion
-    
+
     #region Methods
-    
+
     [HttpGet]
     public virtual async Task<IActionResult> GetAll()
     {
         return await TryExecuteControllerTask(async () => await _service.GetAll());
     }
-    
+
     [HttpGet("{id:guid}")]
     public virtual async Task<IActionResult> GetById(Guid id)
     {
         return await TryExecuteControllerTask(async () => await _service.GetById(id));
     }
-    
+
     [HttpPost]
-    public virtual  async Task<IActionResult> Create(TCreateDto createDto)
+    public virtual async Task<IActionResult> Create(TCreateDto createDto)
     {
         return await TryExecuteControllerTask(async () =>
         {
@@ -90,9 +98,9 @@ public class ControllerBaseExtended<T, TCreateDto, TUpdateDto, TService> : Contr
             return await _service.Create(createDto);
         });
     }
-    
+
     [HttpPut("{id:guid}")]
-    public virtual  async Task<IActionResult> Update(Guid id, TUpdateDto updateDto)
+    public virtual async Task<IActionResult> Update(Guid id, TUpdateDto updateDto)
     {
         return await TryExecuteControllerTask(async () =>
         {
@@ -100,12 +108,12 @@ public class ControllerBaseExtended<T, TCreateDto, TUpdateDto, TService> : Contr
             return await _service.Update(id, updateDto);
         });
     }
-    
+
     [HttpDelete("{id:guid}")]
     public virtual async Task<IActionResult> Delete(Guid id)
     {
         return await TryExecuteControllerTask(async () => await _service.Delete(id));
     }
-    
+
     #endregion
 }

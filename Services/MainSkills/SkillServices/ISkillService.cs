@@ -4,4 +4,6 @@ using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainSkills.SkillServices;
 
-public interface ISkillService : IBaseService<Skill, SkillCreateDto, SkillUpdateDto> { }
+public interface ISkillService : IBaseService<Skill, SkillCreateDto, SkillUpdateDto>
+{
+}
