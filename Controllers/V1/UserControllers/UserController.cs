@@ -62,8 +62,6 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
     }
     
     [HttpGet("logout")]
-    [Authorize("user")]
-    [Authorize("admin")]
     public async Task<IActionResult> Logout()
     {
         return await TryExecuteControllerTask(() =>
