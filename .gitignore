@@ -54,5 +54,5 @@ msbuild.wrn
 /appsettings.Production.json
 /files/
 
-.appsettings
+appsettings
 
