@@ -1,6 +1,5 @@
 using APMApi.Config.Swagger;
 using APMApi.Services.MainChats.ChatServices;
-using APMApi.Services.MainChats.MessageServices;
 using APMApi.Services.MainFeedBacks.FeedBackApplicationServices;
 using APMApi.Services.MainFeedBacks.FeedBackServices;
 using APMApi.Services.MainFeedBacks.IssueServices;
@@ -36,7 +35,6 @@ public static class DependencyInjections
 
         // chat services
         services.AddScoped<IChatService, ChatService>();
-        services.AddScoped<IMessageService, MessageService>();
 
         // feedback services
         services.AddScoped<IFeedBackService, FeedBackService>();

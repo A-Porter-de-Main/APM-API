@@ -47,9 +47,7 @@ public class DataContext : DbContext
     ///     Chats tables
     /// </summary>
     public required DbSet<Chat> Chats { get; set; }
-
-    public required DbSet<Message> Messages { get; set; }
-
+    
     /// <summary>
     ///     FeedBacks tables
     /// </summary>
