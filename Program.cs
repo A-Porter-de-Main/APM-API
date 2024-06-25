@@ -19,6 +19,8 @@ var audience = builder.Configuration.GetSection("Jwt:Audience").Get<string>() ??
                throw new Exception("Jwt:Audience not found in appsettings.json");
 var key = builder.Configuration.GetSection("Jwt:Key").Get<string>() ??
           throw new Exception("Jwt:Key not found in appsettings.json");
+var origins = builder.Configuration.GetSection("Origins").Get<string>() ??
+             throw new Exception("Origins not found in appsettings.json");
 
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -28,13 +30,13 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 });
 
 builder.Services.AddCors(options =>
-    options.AddPolicy("AllowAll",
-        policyBuilder => policyBuilder.AllowAnyOrigin()
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policyBuilder => policyBuilder.WithOrigins(origins.Split(","))
             .AllowAnyHeader()
-            .SetIsOriginAllowed(_ => true)
-            .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-    )
-);
+            .AllowAnyMethod()
+            .AllowCredentials());
+}); 
 
 // Add DbContext
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -118,6 +120,9 @@ builder.Services
     });
 
 var app = builder.Build();
+
+app.UseCors("AllowSpecificOrigin");
+
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
 app.UseSwagger();
