@@ -18,6 +18,7 @@ public class DataSeeder
 
     private readonly ModelBuilder _modelBuilder;
     private readonly List<User> _users = new();
+    private readonly List<Role> _roles = new();
 
     #endregion
 
@@ -25,21 +26,42 @@ public class DataSeeder
 
     private void GenerateUsers()
     {
-        for (var i = 0; i < 10; i++)
+        _users.AddRange(new List<User>
         {
-            var user = new User
+            new()
             {
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-            _users.Add(user);
-        }
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                FirstName = "John",
+                LastName = "Doe",
+                PicturePath = "https://cours-informatique-gratuit.fr/wp-content/uploads/2014/05/administrateur.png",
+                Email = "admin@apm.com",
+                Password = BCrypt.Net.BCrypt.HashPassword("motDePasse", 5),
+                RoleId = Guid.Parse("00000000-0000-0000-0000-000000000001")
+            }
+        });
+    }
 
-        _modelBuilder.Entity<User>().HasData(_users);
+    private void GenerateRoles()
+    {
+        _roles.AddRange(new List<Role>
+        {
+            new() {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Name = "admin"
+            },
+            new()
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                Name = "user"
+            }
+        });
+        
+        _modelBuilder.Entity<Role>().HasData(_roles);
     }
 
     public void Seed()
     {
+        GenerateRoles();
         GenerateUsers();
     }
 

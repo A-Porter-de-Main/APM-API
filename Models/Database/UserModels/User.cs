@@ -40,7 +40,7 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
 
     [Column("strip_user_id")] public Guid? StripUserId { get; set; }
     
-    [Column("picture_path")] [MaxLength(150)] public string? PicturePath { get; set; }
+    [Column("picture_path")] [MaxLength(150)] public string PicturePath { get; set; } = null!;
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
@@ -72,7 +72,7 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
             FirstName = userCreateDto.FirstName,
             LastName = userCreateDto.LastName,
             Email = userCreateDto.Email,
-            PicturePath = userCreateDto.ImagePath,
+            PicturePath = userCreateDto.ImagePath!,
             Phone = userCreateDto.Phone,
             Password = userCreateDto.Password,
             CreatedAt = DateTime.Now,
@@ -82,10 +82,11 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
 
     public User Update(UserUpdateDto userUpdateDto)
     {
-        FirstName = userUpdateDto.FirstName;
-        LastName = userUpdateDto.LastName;
-        Email = userUpdateDto.Email;
-        Phone = userUpdateDto.Phone;
+        FirstName = userUpdateDto.FirstName ?? FirstName;
+        LastName = userUpdateDto.LastName ?? LastName;
+        Email = userUpdateDto.Email ?? Email;
+        Phone = userUpdateDto.Phone ?? Phone;
+        PicturePath = userUpdateDto.ImagePath ?? PicturePath;
         UpdatedAt = DateTime.Now;
         return this;
     }

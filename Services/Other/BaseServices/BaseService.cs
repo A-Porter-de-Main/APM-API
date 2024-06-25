@@ -13,7 +13,7 @@ public class BaseService<T, TCreateDto, TUpdateDto> : IBaseService<T, TCreateDto
 {
     private readonly DataContext _context;
 
-    public BaseService(DataContext context)
+    protected BaseService(DataContext context)
     {
         _context = context;
     }
@@ -26,7 +26,7 @@ public class BaseService<T, TCreateDto, TUpdateDto> : IBaseService<T, TCreateDto
         return entity;
     }
 
-    public virtual async Task<T> Update(Guid id, TUpdateDto updateDto)
+    public virtual async Task<T?> Update(Guid id, TUpdateDto updateDto)
     {
         var entity = await T.GetDbSet(_context).FindAsync(id);
         if (entity == null) throw new Exception("Entity not found");
@@ -35,7 +35,7 @@ public class BaseService<T, TCreateDto, TUpdateDto> : IBaseService<T, TCreateDto
         return entity;
     }
 
-    public virtual async Task<T> Delete(Guid id)
+    public virtual async Task<T?> Delete(Guid id)
     {
         var entity = await T.GetDbSet(_context).FindAsync(id);
         if (entity == null) throw new NotFoundException("Entity not found");
@@ -44,7 +44,7 @@ public class BaseService<T, TCreateDto, TUpdateDto> : IBaseService<T, TCreateDto
         return entity;
     }
 
-    public virtual async Task<T> GetById(Guid id)
+    public virtual async Task<T?> GetById(Guid id)
     {
         var entity = await T.GetDbSet(_context).FindAsync(id);
         if (entity == null) throw new NotFoundException("Entity not found");

@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using APMApi.Services.Other.FileServices;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APMApi.Controllers.V1;
@@ -26,6 +27,7 @@ public class FilesController : ControllerBase
     #region Methods
 
     [HttpGet]
+    [MapToApiVersion(1.0)]
     public IActionResult GetDocumentFile(string fileName)
     {
         var filePath = _fileService.GetDocumentByLink(fileName);

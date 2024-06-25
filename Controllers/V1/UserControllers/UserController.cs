@@ -1,11 +1,16 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.UserModels;
+using APMApi.Models.Dto.UserDto.AddressDto;
 using APMApi.Models.Dto.UserDto.UserDto;
+using APMApi.Models.Exception;
+using APMApi.Services.MainUsers.AddressServices;
 using APMApi.Services.MainUsers.UserServices;
 using APMApi.Services.Other.FileServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace APMApi.Controllers.V1.UserControllers;
 
@@ -18,15 +23,20 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
 
     private readonly IUserService _userService;
     private readonly IFileService _fileService;
+    private readonly IAddressService _addressService;
 
     #endregion
 
     #region Constructor
 
-    public UserController(IUserService userService, IFileService fileService) : base(userService)
-    {
+    public UserController(
+        IUserService userService,
+        IFileService fileService,
+        IAddressService addressService
+    ) : base(userService) {
         _userService = userService;
         _fileService = fileService;
+        _addressService = addressService;
     }
 
     #endregion
@@ -55,7 +65,9 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             if (User.Identity?.IsAuthenticated == true)
             {
                 var id = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-                if (id != null) return await _userService.GetById(Guid.Parse(id));
+                var user = await _userService.GetById(Guid.Parse(id!)) ?? throw new NotFoundException("User not found");
+                if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
+                return user;
             }
 
             var visitorToken = _userService.GenerateVisitor();
@@ -103,7 +115,15 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             
             var password = createDto.Password;
             await ValidateDto(createDto);
-            var result = await _userService.Create(createDto);
+            var user = await _userService.Create(createDto);
+
+            if (createDto.Address != null)
+            {
+                createDto.Address.UserId = user.Id;
+                var address = await _addressService.Create(createDto.Address);
+                user.Addresses = new List<Address> { address };
+            }
+            
             var token = await _userService.Login(new UserLoginDto
             {
                 Email = createDto.Email,
@@ -111,7 +131,10 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             });
             if (token == null) throw new Exception("Impossible to login");
             HttpContext.Response.Cookies.Append("dXNlclRva2Vu", token.Token);
-            return result;
+            
+            if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
+
+            return user;
         });
     }
 
@@ -119,14 +142,33 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
     [Authorize("admin")]
     public override Task<IActionResult> Update(Guid id, UserUpdateDto updateDto)
     {
-        return base.Update(id, updateDto);
+        return TryExecuteControllerTask(async () =>
+        {
+            var user = await _userService.GetById(id);
+            if (user == null) throw new NotFoundException("User not found");
+            
+            if (updateDto.Image != null) updateDto.ImagePath = await _fileService.UpdateDocument(updateDto.Image, user.PicturePath);
+            await ValidateDto(updateDto);
+
+            if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
+
+            
+            return await _userService.Update(id, updateDto);
+        });
     }
 
     [HttpDelete("{id:guid}")]
     [Authorize("admin")]
     public override Task<IActionResult> Delete(Guid id)
     {
-        return base.Delete(id);
+        return TryExecuteControllerTask(async () =>
+        {
+            var user = await _userService.GetById(id);
+            if (user == null) throw new NotFoundException("User not found");
+
+            _fileService.DeleteDocument(user.PicturePath);
+            return await _userService.Delete(id);
+        });
     }
 
     #endregion

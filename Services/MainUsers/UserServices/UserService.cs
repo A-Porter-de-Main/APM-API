@@ -102,5 +102,18 @@ public class UserService : BaseService<User, UserCreateDto, UserUpdateDto>, IUse
         };
     }
 
+    public override async Task<User?> GetById(Guid id)
+    {
+        return await _context.Users
+            .Include(s => s.Addresses)
+            .Include(s => s.Preference)
+            .Include(s => s.Skills)
+            .Include(s => s.FeedBacks)
+            .Include(s => s.FeedBackApplications)
+            .Include(s => s.Issues)
+            .Include(s => s.Objects)
+            .FirstOrDefaultAsync(s => s.Id == id);
+    }
+
     #endregion
 }
