@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using APMApi.Context;
 using APMApi.Models.Database.FeedBackModels;
 using APMApi.Models.Database.SkillModels;
-using APMApi.Models.Dto.UserModels.UserDto;
+using APMApi.Models.Dto.UserDto.UserDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,6 +40,7 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
 
     [Column("strip_user_id")] public Guid? StripUserId { get; set; }
     
+    [Column("picture_path")] [MaxLength(150)] public string? PicturePath { get; set; }
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
@@ -49,18 +49,16 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
     
     #region Relations
     
-    [Column("role_id")] public Guid RoleId { get; }
-    [ForeignKey(nameof(RoleId))] public Role Role { get; } = null!;
-    [Column("picture_id")] public Guid? PictureId { get; }
-    [ForeignKey(nameof(PictureId))] public Picture? Picture { get; }
+    [Column("role_id")] public Guid? RoleId { get; set; }
+    [ForeignKey(nameof(RoleId))] public Role? Role { get; set; }
     
-    public IEnumerable<Address>? Addresses { get; }
-    public Preference Preference { get; } = null!;
-    public IEnumerable<Skill>? Skills { get; }
-    public IEnumerable<FeedBack>? FeedBacks { get; }
-    public IEnumerable<FeedBackApplication>? FeedBackApplications { get; }
-    public IEnumerable<Issue>? Issues { get; }
-    public IEnumerable<ObjectModel>? Objects { get; }
+    public IEnumerable<Address>? Addresses { get; set; }
+    public Preference? Preference { get; set; }
+    public IEnumerable<Skill>? Skills { get; set; }
+    public IEnumerable<FeedBack>? FeedBacks { get; set; }
+    public IEnumerable<FeedBackApplication>? FeedBackApplications { get; set; }
+    public IEnumerable<Issue>? Issues { get; set; }
+    public IEnumerable<ObjectModel>? Objects { get; set; }
 
     #endregion
     
@@ -74,6 +72,7 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
             FirstName = userCreateDto.FirstName,
             LastName = userCreateDto.LastName,
             Email = userCreateDto.Email,
+            PicturePath = userCreateDto.ImagePath,
             Phone = userCreateDto.Phone,
             Password = userCreateDto.Password,
             CreatedAt = DateTime.Now,

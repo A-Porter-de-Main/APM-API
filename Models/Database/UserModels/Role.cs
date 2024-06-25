@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
-using APMApi.Models.Dto.UserModels.RoleDto;
+using APMApi.Models.Dto.UserDto.RoleDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
 using APMApi.Models.Database.UserModels;
 using APMApi.Models.Dto.RequestDto.ResponseDto;
 using APMApi.Models.Other;
@@ -28,16 +27,16 @@ public class Response : IBaseModel<Response, ResponseCreateDto, ResponseUpdateDt
 
     #region Relations
 
-    [Column("request_id")] [ForeignKey(nameof(RequestId))] public Guid RequestId { get; set; }
-    public Request Request { get; } = null!;
+    [Column("request_id")] [ForeignKey(nameof(RequestId))] public Guid? RequestId { get; set; }
+    public Request? Request { get; set; }
 
-    [Column("user_id")] [ForeignKey(nameof(UserId))] public Guid UserId { get; set; }
-    public User User { get; } = null!;
+    [Column("user_id")] [ForeignKey(nameof(UserId))] public Guid? UserId { get; set; }
+    public User? User { get; set; }
 
-    [Column("response_status_id")] public Guid StatusId { get; set; }
-    [ForeignKey(nameof(StatusId))] public ResponseStatus Status { get; } = null!;
+    [Column("response_status_id")] public Guid? StatusId { get; set; }
+    [ForeignKey(nameof(StatusId))] public ResponseStatus? Status { get; set; }
     
-    public Chat? Chat { get; }
+    public Chat? Chat { get; set; }
 
     #endregion
 

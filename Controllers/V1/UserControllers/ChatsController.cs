@@ -1,6 +1,6 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.ChatDto;
+using APMApi.Models.Dto.UserDto.ChatDto;
 using APMApi.Services.MainChats.ChatServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

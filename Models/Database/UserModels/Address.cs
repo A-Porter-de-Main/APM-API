@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
-using APMApi.Models.Dto.UserModels.AddressDto;
+using APMApi.Models.Dto.UserDto.AddressDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,8 +19,6 @@ public class Address : IBaseModel<Address, AddressCreateDto, AddressUpdateDto>
 
     [Column("street")] [MaxLength(50)] public string Street { get; set; } = null!;
 
-    [Column("floor")] [MaxLength(50)] public string? Floor { get; set; }
-
     [Column("city")] [MaxLength(50)] public string City { get; set; } = null!;
 
     [Column("zip_code")] [MaxLength(50)] public string ZipCode { get; set; } = null!;
@@ -38,8 +35,8 @@ public class Address : IBaseModel<Address, AddressCreateDto, AddressUpdateDto>
 
     #region Relations
 
-    [Column("user_id")] public Guid UserId { get; set; }
-    [ForeignKey(nameof(UserId))] public User User { get; } = null!;
+    [Column("user_id")] public Guid? UserId { get; set; }
+    [ForeignKey(nameof(UserId))] public User? User { get; set; }
 
     #endregion
 
@@ -50,7 +47,6 @@ public class Address : IBaseModel<Address, AddressCreateDto, AddressUpdateDto>
         return new Address
         {
             Street = createDto.Street,
-            Floor = createDto.Floor,
             City = createDto.City,
             ZipCode = createDto.ZipCode,
             Latitude = createDto.Latitude,
@@ -63,7 +59,6 @@ public class Address : IBaseModel<Address, AddressCreateDto, AddressUpdateDto>
     public Address Update(AddressUpdateDto updateDto)
     {
         Street = updateDto.Street;
-        Floor = updateDto.Floor;
         City = updateDto.City;
         ZipCode = updateDto.ZipCode;
         Latitude = updateDto.Latitude;

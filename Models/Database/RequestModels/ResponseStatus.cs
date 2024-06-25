@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
 using APMApi.Models.Dto.RequestDto.ResponseStatusDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +26,7 @@ public class ResponseStatus : IBaseModel<ResponseStatus, ResponseStatusCreateDto
 
     #region Relations
 
-    public IEnumerable<Response>? Responses { get; }
+    public IEnumerable<Response>? Responses { get; set; }
 
     #endregion
 

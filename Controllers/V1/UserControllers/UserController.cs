@@ -1,7 +1,8 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.UserDto;
+using APMApi.Models.Dto.UserDto.UserDto;
 using APMApi.Services.MainUsers.UserServices;
+using APMApi.Services.Other.FileServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +17,16 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
     #region Fields
 
     private readonly IUserService _userService;
+    private readonly IFileService _fileService;
 
     #endregion
 
     #region Constructor
 
-    public UserController(IUserService userService) : base(userService)
+    public UserController(IUserService userService, IFileService fileService) : base(userService)
     {
         _userService = userService;
+        _fileService = fileService;
     }
 
     #endregion
@@ -68,7 +71,10 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
         {
             if (User.Identity?.IsAuthenticated == false) throw new Exception("User is not authenticated");
             HttpContext.Response.Cookies.Delete("dXNlclRva2Vu");
-            return Task.FromResult(true);
+            
+            var visitorToken = _userService.GenerateVisitor();
+            HttpContext.Response.Cookies.Append("dXNlclRva2Vu", visitorToken.Token);
+            return Task.FromResult(visitorToken);
         });
     }
 
@@ -88,9 +94,25 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
 
     [HttpPost]
     [Authorize("visitor")]
-    public override Task<IActionResult> Create(UserCreateDto createDto)
+    public override Task<IActionResult> Create([FromForm] UserCreateDto createDto)
     {
-        return base.Create(createDto);
+        return TryExecuteControllerTask(async () =>
+        {
+            if (createDto.Image == null) throw new Exception("Image is required");
+            createDto.ImagePath = await _fileService.AddDocument(createDto.Image);
+            
+            var password = createDto.Password;
+            await ValidateDto(createDto);
+            var result = await _userService.Create(createDto);
+            var token = await _userService.Login(new UserLoginDto
+            {
+                Email = createDto.Email,
+                Password = password
+            });
+            if (token == null) throw new Exception("Impossible to login");
+            HttpContext.Response.Cookies.Append("dXNlclRva2Vu", token.Token);
+            return result;
+        });
     }
 
     [HttpPut("{id:guid}")]

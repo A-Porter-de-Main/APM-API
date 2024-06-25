@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
 using APMApi.Models.Database.RequestModels;
 using APMApi.Models.Database.UserModels;
 using APMApi.Models.Dto.CategoryDto.ObjectDto;
@@ -25,6 +24,7 @@ public class ObjectModel : IBaseModel<ObjectModel, ObjectCreateDto, ObjectUpdate
     [MaxLength(250)]
     public string Description { get; set; } = null!;
 
+    [Column("picture_path")] [MaxLength(150)] public string? PicturePath { get; set; }
 
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
@@ -33,15 +33,12 @@ public class ObjectModel : IBaseModel<ObjectModel, ObjectCreateDto, ObjectUpdate
     #endregion
 
     #region Relations
-    
-    [Column("picture_id")] public Guid? PictureId { get; set; }
-    [ForeignKey(nameof(PictureId))] public Picture? Picture { get; }
 
     [Column("category_id")] [ForeignKey(nameof(CategoryId))] public Guid? CategoryId { get; set; }
-    public ObjectCategory? Category { get; }
+    public ObjectCategory? Category { get; set; }
     
-    public IEnumerable<User>? Users { get; }
-    public IEnumerable<Request>? Requests { get; }
+    public IEnumerable<User>? Users { get; set; }
+    public IEnumerable<Request>? Requests { get; set; }
 
     #endregion
 

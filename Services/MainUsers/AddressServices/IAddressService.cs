@@ -1,5 +1,5 @@
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.AddressDto;
+using APMApi.Models.Dto.UserDto.AddressDto;
 using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainUsers.AddressServices;

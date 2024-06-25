@@ -1,6 +1,6 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.AddressDto;
+using APMApi.Models.Dto.UserDto.AddressDto;
 using APMApi.Services.MainUsers.AddressServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

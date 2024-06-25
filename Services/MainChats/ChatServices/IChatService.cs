@@ -1,5 +1,5 @@
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.ChatDto;
+using APMApi.Models.Dto.UserDto.ChatDto;
 using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainChats.ChatServices;

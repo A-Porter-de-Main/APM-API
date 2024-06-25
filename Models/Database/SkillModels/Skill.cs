@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
 using APMApi.Models.Database.RequestModels;
 using APMApi.Models.Database.UserModels;
 using APMApi.Models.Dto.CategoryDto.SkillDto;
@@ -25,6 +24,8 @@ public class Skill : IBaseModel<Skill, SkillCreateDto, SkillUpdateDto>
     [MaxLength(250)]
     public string Description { get; set; } = null!;
     
+    [Column("picture_path")] [MaxLength(150)] public string PicturePath { get; set; } = null!;
+    
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
@@ -33,10 +34,8 @@ public class Skill : IBaseModel<Skill, SkillCreateDto, SkillUpdateDto>
 
     #region Relations
 
-    [Column("picture_id")] public Guid? PictureId { get; set; }
-    [ForeignKey(nameof(PictureId))] public Picture? Picture { get; }
-    public IEnumerable<User>? Users { get; }
-    public IEnumerable<Request>? Requests { get; }
+    public IEnumerable<User>? Users { get; set; }
+    public IEnumerable<Request>? Requests { get; set; }
     
     #endregion
 

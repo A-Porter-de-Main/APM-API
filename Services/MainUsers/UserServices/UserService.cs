@@ -1,10 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using APMApi.Context;
 using APMApi.Models;
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.UserDto;
+using APMApi.Models.Dto.UserDto.UserDto;
 using APMApi.Models.Exception;
 using APMApi.Models.Other;
 using APMApi.Services.Other.BaseServices;

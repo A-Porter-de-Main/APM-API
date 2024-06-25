@@ -1,14 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
 using APMApi.Models.Database.RequestModels;
-using APMApi.Models.Dto.UserModels.ChatDto;
+using APMApi.Models.Dto.UserDto.ChatDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
 namespace APMApi.Models.Database.UserModels;
 
 [Table("Chats")]
+[Index(nameof(ResponseId), IsUnique = true)]
 public class Chat : IBaseModel<Chat, ChatCreateDto, ChatUpdateDto>
 {
     #region Fields
@@ -24,8 +24,8 @@ public class Chat : IBaseModel<Chat, ChatCreateDto, ChatUpdateDto>
 
     #region Relations
 
-    [Column("response_id")] public Guid ResponseId { get; set; }
-    [ForeignKey(nameof(ResponseId))] public Response Response { get; } = null!;
+    [Column("response_id")] public Guid? ResponseId { get; set; }
+    [ForeignKey(nameof(ResponseId))] public Response? Response { get; set; }
 
     #endregion
     

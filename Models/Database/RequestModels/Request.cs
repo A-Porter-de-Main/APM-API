@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
 using APMApi.Models.Database.SkillModels;
 using APMApi.Models.Dto.RequestDto.RequestDto;
 using APMApi.Models.Other;
@@ -32,16 +31,16 @@ public class Request : IBaseModel<Request, RequestCreateDto, RequestUpdateDto>
     
     #region Relations
 
-    [Column("status_id")] public Guid StatusId { get; }
-    [ForeignKey(nameof(StatusId))] public Status Status { get; } = null!;
+    [Column("status_id")] public Guid? StatusId { get; set; }
+    [ForeignKey(nameof(StatusId))] public Status? Status { get; set; }
     
-    public IEnumerable<Picture>? Pictures { get; }
+    public IEnumerable<Picture>? Pictures { get; set; }
     
-    public IEnumerable<Response>? Responses { get; }
+    public IEnumerable<Response>? Responses { get; set; }
     
-    public IEnumerable<Skill>? Skills { get; }
+    public IEnumerable<Skill>? Skills { get; set; }
     
-    public IEnumerable<ObjectModel>? Objects { get; }
+    public IEnumerable<ObjectModel>? Objects { get; set; }
 
     #endregion
 

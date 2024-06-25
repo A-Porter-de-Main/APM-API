@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
 using APMApi.Models.Dto.CategoryDto.TypeDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +22,9 @@ public class ObjectCategory : IBaseModel<ObjectCategory, ObjectCategoryCreateDto
     [Column("description")]
     [MaxLength(250)]
     public string Description { get; set; } = null!;
-
+    
+    [Column("picture_path")] [MaxLength(150)] public string? PicturePath { get; set; }
+    
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
@@ -31,16 +32,13 @@ public class ObjectCategory : IBaseModel<ObjectCategory, ObjectCategoryCreateDto
     #endregion
 
     #region Relations
-    
-    [Column("picture_id")] public Guid? PictureId { get; set; }
-    [ForeignKey(nameof(PictureId))] public Picture? Picture { get; }
 
     [Column("parent_id")] [ForeignKey(nameof(ParentId))] public Guid? ParentId { get; set; }
-    public ObjectCategory? Parent { get; }
+    public ObjectCategory? Parent { get; set; }
 
-    public IEnumerable<ObjectModel>? Objects { get; }
+    public IEnumerable<ObjectModel>? Objects { get; set; }
     
-    public IEnumerable<ObjectCategory>? Children { get; }
+    public IEnumerable<ObjectCategory>? Children { get; set; }
 
     #endregion
 

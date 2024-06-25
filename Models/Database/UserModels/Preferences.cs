@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
-using APMApi.Models.Dto.UserModels.PreferenceDto;
+using APMApi.Models.Dto.UserDto.PreferenceDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,8 +31,8 @@ public class Preference : IBaseModel<Preference, PreferenceCreateDto, Preference
 
     #region Relations
     
-    [Column("user_id")] public Guid UserId { get; set; }
-    [ForeignKey(nameof(UserId))] public User User { get; } = null!;
+    [Column("user_id")] public Guid? UserId { get; set; }
+    [ForeignKey(nameof(UserId))] public User? User { get; set; }
 
     #endregion
 

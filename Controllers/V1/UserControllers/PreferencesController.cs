@@ -1,6 +1,6 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.PreferenceDto;
+using APMApi.Models.Dto.UserDto.PreferenceDto;
 using APMApi.Services.MainUsers.PreferenceServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

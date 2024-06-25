@@ -1,6 +1,6 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.RoleDto;
+using APMApi.Models.Dto.UserDto.RoleDto;
 using APMApi.Services.MainUsers.RoleServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

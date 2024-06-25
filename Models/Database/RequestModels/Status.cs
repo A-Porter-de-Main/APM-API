@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
 using APMApi.Models.Dto.RequestDto.StatusDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +26,7 @@ public class Status : IBaseModel<Status, StatusCreateDto, StatusUpdateDto>
     
     #region Relations
 
-    public IEnumerable<Request>? Requests { get; }
+    public IEnumerable<Request>? Requests { get; set; }
     
     #endregion
 

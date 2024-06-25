@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Context;
 using APMApi.Models.Database.UserModels;
 using APMApi.Models.Dto.FeedBackDto.FeedBackApplicationDto;
 using APMApi.Models.Other;
@@ -33,8 +32,8 @@ public class
     
     #region Relations
     
-    [Column("user_id")] public Guid UserId { get; set; }
-    [ForeignKey(nameof(UserId))] public User User { get; } = null!;
+    [Column("user_id")] public Guid? UserId { get; set; }
+    [ForeignKey(nameof(UserId))] public User? User { get; set; }
 
     #endregion
 

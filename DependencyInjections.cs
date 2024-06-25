@@ -3,9 +3,9 @@ using APMApi.Services.MainChats.ChatServices;
 using APMApi.Services.MainFeedBacks.FeedBackApplicationServices;
 using APMApi.Services.MainFeedBacks.FeedBackServices;
 using APMApi.Services.MainFeedBacks.IssueServices;
-using APMApi.Services.MainRequests.PictureServices;
 using APMApi.Services.MainRequests.RequestServices;
 using APMApi.Services.MainRequests.ResponseServices;
+using APMApi.Services.MainRequests.ResponseStatusServices;
 using APMApi.Services.MainRequests.StatusServices;
 using APMApi.Services.MainSkills.ObjectCategoryServices;
 using APMApi.Services.MainSkills.ObjectServices;
@@ -49,7 +49,7 @@ public static class DependencyInjections
         // request services
         services.AddScoped<IRequestService, RequestService>();
         services.AddScoped<IResponseService, ResponseService>();
-        services.AddScoped<IPictureService, PictureService>();
         services.AddScoped<IStatusService, StatusService>();
+        services.AddScoped<IResponseStatusService, ResponseStatusService>();
     }
 }
