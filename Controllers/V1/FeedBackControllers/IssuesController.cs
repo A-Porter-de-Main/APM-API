@@ -1,6 +1,6 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.FeedBackModels;
-using APMApi.Models.Dto.FeedBackModels.Issue;
+using APMApi.Models.Dto.FeedBackDto.IssueDto;
 using APMApi.Services.MainFeedBacks.IssueServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

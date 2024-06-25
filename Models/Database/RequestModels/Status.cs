@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Models.Dto.RequestModels.Status;
+using APMApi.Context;
+using APMApi.Models.Dto.RequestDto.StatusDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,8 @@ namespace APMApi.Models.Database.RequestModels;
 [Table("Statuses")]
 public class Status : IBaseModel<Status, StatusCreateDto, StatusUpdateDto>
 {
+    #region Fields
+
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,6 +22,16 @@ public class Status : IBaseModel<Status, StatusCreateDto, StatusUpdateDto>
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+
+    #endregion
+    
+    #region Relations
+
+    public IEnumerable<Request>? Requests { get; }
+    
+    #endregion
+
+    #region Methods
 
     public static Status Create(StatusCreateDto createDto)
     {
@@ -41,4 +54,6 @@ public class Status : IBaseModel<Status, StatusCreateDto, StatusUpdateDto>
     {
         return context.Statuses;
     }
+
+    #endregion
 }

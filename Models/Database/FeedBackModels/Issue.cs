@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Models.Dto.FeedBackModels.Issue;
+using APMApi.Context;
+using APMApi.Models.Database.UserModels;
+using APMApi.Models.Dto.FeedBackDto.IssueDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +11,8 @@ namespace APMApi.Models.Database.FeedBackModels;
 [Table("Issues")]
 public class Issue : IBaseModel<Issue, IssueCreateDto, IssueUpdateDto>
 {
+    #region Fields
+
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,9 +22,21 @@ public class Issue : IBaseModel<Issue, IssueCreateDto, IssueUpdateDto>
     [MaxLength(250)]
     public string Description { get; set; } = null!;
 
+
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+
+    #endregion
+    
+    #region Relations
+    
+    [Column("user_id")] public Guid UserId { get; set; }
+    [ForeignKey(nameof(UserId))] public User User { get; } = null!;
+
+    #endregion
+
+    #region Methods
 
     public static Issue Create(IssueCreateDto createDto)
     {
@@ -43,4 +59,6 @@ public class Issue : IBaseModel<Issue, IssueCreateDto, IssueUpdateDto>
     {
         return context.Issues;
     }
+
+    #endregion
 }

@@ -1,6 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Models.Dto.CategoryModels.Skill;
+using APMApi.Context;
+using APMApi.Models.Database.RequestModels;
+using APMApi.Models.Database.UserModels;
+using APMApi.Models.Dto.CategoryDto.SkillDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +12,8 @@ namespace APMApi.Models.Database.SkillModels;
 [Table("Skills")]
 public class Skill : IBaseModel<Skill, SkillCreateDto, SkillUpdateDto>
 {
+    #region Fields
+    
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,11 +24,24 @@ public class Skill : IBaseModel<Skill, SkillCreateDto, SkillUpdateDto>
     [Column("description")]
     [MaxLength(250)]
     public string Description { get; set; } = null!;
-
+    
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+    
+    #endregion
 
+    #region Relations
+
+    [Column("picture_id")] public Guid? PictureId { get; set; }
+    [ForeignKey(nameof(PictureId))] public Picture? Picture { get; }
+    public IEnumerable<User>? Users { get; }
+    public IEnumerable<Request>? Requests { get; }
+    
+    #endregion
+
+    #region Methods
+    
     public static Skill Create(SkillCreateDto dto)
     {
         return new Skill
@@ -47,4 +65,6 @@ public class Skill : IBaseModel<Skill, SkillCreateDto, SkillUpdateDto>
     {
         return context.Skills;
     }
+
+    #endregion
 }

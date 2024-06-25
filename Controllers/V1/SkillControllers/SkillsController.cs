@@ -1,6 +1,6 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.SkillModels;
-using APMApi.Models.Dto.CategoryModels.Skill;
+using APMApi.Models.Dto.CategoryDto.SkillDto;
 using APMApi.Services.MainSkills.SkillServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

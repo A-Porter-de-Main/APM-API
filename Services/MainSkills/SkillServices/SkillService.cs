@@ -1,6 +1,7 @@
+using APMApi.Context;
+using APMApi.Models;
 using APMApi.Models.Database.SkillModels;
-using APMApi.Models.Dto.CategoryModels.Skill;
-using APMApi.Models.Other;
+using APMApi.Models.Dto.CategoryDto.SkillDto;
 using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainSkills.SkillServices;

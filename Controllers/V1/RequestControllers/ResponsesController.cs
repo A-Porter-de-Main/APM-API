@@ -1,6 +1,6 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.RequestModels;
-using APMApi.Models.Dto.RequestModels.Response;
+using APMApi.Models.Dto.RequestDto.ResponseDto;
 using APMApi.Services.MainRequests.ResponseServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

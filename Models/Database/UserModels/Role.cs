@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Models.Dto.UserModels.Role;
+using APMApi.Context;
+using APMApi.Models.Dto.UserModels.RoleDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,8 @@ namespace APMApi.Models.Database.UserModels;
 [Table("Roles")]
 public class Role : IBaseModel<Role, RoleCreateDto, RoleUpdateDto>
 {
+    #region Fields
+
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,6 +21,17 @@ public class Role : IBaseModel<Role, RoleCreateDto, RoleUpdateDto>
 
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
+    
+    #endregion
+
+    #region Relations
+    
+    public IEnumerable<User>? Users { get; set; }
+
+    #endregion
+
+    #region Methods
+    
     public static Role Create(RoleCreateDto createDto)
     {
         return new Role
@@ -37,4 +51,7 @@ public class Role : IBaseModel<Role, RoleCreateDto, RoleUpdateDto>
     {
         return context.Roles;
     }
+
+    #endregion
+    
 }

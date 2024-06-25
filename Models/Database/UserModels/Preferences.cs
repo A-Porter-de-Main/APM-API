@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Models.Dto.UserModels.Preference;
+using APMApi.Context;
+using APMApi.Models.Dto.UserModels.PreferenceDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,8 @@ namespace APMApi.Models.Database.UserModels;
 [Table("Preferences")]
 public class Preference : IBaseModel<Preference, PreferenceCreateDto, PreferenceUpdateDto>
 {
+    #region Fields
+    
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,10 +23,22 @@ public class Preference : IBaseModel<Preference, PreferenceCreateDto, Preference
 
     [Column("by_phone")] public bool ByPhone { get; set; }
 
+
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
 
+    #endregion
+
+    #region Relations
+    
+    [Column("user_id")] public Guid UserId { get; set; }
+    [ForeignKey(nameof(UserId))] public User User { get; } = null!;
+
+    #endregion
+
+    #region Methods
+    
     public static Preference Create(PreferenceCreateDto createDto)
     {
         return new Preference
@@ -49,4 +64,6 @@ public class Preference : IBaseModel<Preference, PreferenceCreateDto, Preference
     {
         return context.Preferences;
     }
+
+    #endregion
 }

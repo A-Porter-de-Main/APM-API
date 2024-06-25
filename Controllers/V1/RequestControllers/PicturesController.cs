@@ -1,6 +1,6 @@
 using APMApi.Helpers;
-using APMApi.Models.Database.RequestModels;
-using APMApi.Models.Dto.RequestModels.Picture;
+using APMApi.Models.Database;
+using APMApi.Models.Dto.RequestDto.PictureDto;
 using APMApi.Services.MainRequests.PictureServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

@@ -1,5 +1,5 @@
-using APMApi.Models.Database.RequestModels;
-using APMApi.Models.Dto.RequestModels.Picture;
+using APMApi.Models.Database;
+using APMApi.Models.Dto.RequestDto.PictureDto;
 using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainRequests.PictureServices;

@@ -1,6 +1,6 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.RequestModels;
-using APMApi.Models.Dto.RequestModels.Status;
+using APMApi.Models.Dto.RequestDto.StatusDto;
 using APMApi.Services.MainRequests.StatusServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;

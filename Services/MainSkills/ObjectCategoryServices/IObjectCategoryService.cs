@@ -1,5 +1,5 @@
 using APMApi.Models.Database.SkillModels;
-using APMApi.Models.Dto.CategoryModels.Type;
+using APMApi.Models.Dto.CategoryDto.TypeDto;
 using APMApi.Services.Other.BaseServices;
 
 namespace APMApi.Services.MainSkills.ObjectCategoryServices;

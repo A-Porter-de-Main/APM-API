@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Models.Dto.FeedBackModels.FeedBackApplication;
+using APMApi.Context;
+using APMApi.Models.Database.UserModels;
+using APMApi.Models.Dto.FeedBackDto.FeedBackApplicationDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +12,8 @@ namespace APMApi.Models.Database.FeedBackModels;
 public class
     FeedBackApplication : IBaseModel<FeedBackApplication, FeedBackApplicationCreateDto, FeedBackApplicationUpdateDto>
 {
+    #region Fields
+
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,6 +28,17 @@ public class
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+
+    #endregion
+    
+    #region Relations
+    
+    [Column("user_id")] public Guid UserId { get; set; }
+    [ForeignKey(nameof(UserId))] public User User { get; } = null!;
+
+    #endregion
+
+    #region Methods
 
     public static FeedBackApplication Create(FeedBackApplicationCreateDto dto)
     {
@@ -48,4 +63,6 @@ public class
     {
         return context.FeedBacksApplication;
     }
+
+    #endregion
 }

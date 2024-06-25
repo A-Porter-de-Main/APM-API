@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace APMApi.Helpers;
 
@@ -15,10 +14,7 @@ public class OptionalAuthenticationMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         var result = await context.AuthenticateAsync("Bearer");
-        if (result is { Succeeded: true, Principal: not null })
-        {
-            context.User = result.Principal;
-        }
+        if (result is { Succeeded: true, Principal: not null }) context.User = result.Principal;
         await _next(context);
     }
 }

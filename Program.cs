@@ -3,8 +3,9 @@ using System.Text;
 using System.Text.Json.Serialization;
 using APMApi;
 using APMApi.Config.Swagger;
+using APMApi.Context;
 using APMApi.Helpers;
-using APMApi.Models.Other;
+using APMApi.Models;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,9 +50,7 @@ builder.Services.AddInjections();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options => {
-    options.OperationFilter<SwaggerDefaultValues>();
-});
+builder.Services.AddSwaggerGen(options => { options.OperationFilter<SwaggerDefaultValues>(); });
 
 builder.Configuration
     .AddJsonFile("appsettings.json", false, true)

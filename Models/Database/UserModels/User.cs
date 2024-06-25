@@ -1,7 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using APMApi.Models.Dto.UserModels.User;
+using APMApi.Context;
+using APMApi.Models.Database.FeedBackModels;
+using APMApi.Models.Database.SkillModels;
+using APMApi.Models.Dto.UserModels.UserDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +15,8 @@ namespace APMApi.Models.Database.UserModels;
 [Index(nameof(Phone), IsUnique = true)]
 public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
 {
+    #region Fields
+
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -21,7 +26,7 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
 
     [Column("lastname")] [MaxLength(50)] public string LastName { get; set; } = null!;
 
-    [Column("desciption")]
+    [Column("description")]
     [MaxLength(250)]
     public string? Description { get; set; }
 
@@ -35,10 +40,31 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
     public string Password { get; set; } = null!;
 
     [Column("strip_user_id")] public Guid? StripUserId { get; set; }
-
+    
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+    
+    #endregion
+    
+    #region Relations
+    
+    [Column("role_id")] public Guid RoleId { get; }
+    [ForeignKey(nameof(RoleId))] public Role Role { get; } = null!;
+    [Column("picture_id")] public Guid? PictureId { get; }
+    [ForeignKey(nameof(PictureId))] public Picture? Picture { get; }
+    
+    public IEnumerable<Address>? Addresses { get; }
+    public Preference Preference { get; } = null!;
+    public IEnumerable<Skill>? Skills { get; }
+    public IEnumerable<FeedBack>? FeedBacks { get; }
+    public IEnumerable<FeedBackApplication>? FeedBackApplications { get; }
+    public IEnumerable<Issue>? Issues { get; }
+    public IEnumerable<ObjectModel>? Objects { get; }
+
+    #endregion
+    
+    #region Methods
 
     public static User Create(UserCreateDto userCreateDto)
     {
@@ -69,4 +95,6 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
     {
         return context.Users;
     }
+
+    #endregion
 }

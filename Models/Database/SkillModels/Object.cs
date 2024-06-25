@@ -1,6 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Models.Dto.CategoryModels.Object;
+using APMApi.Context;
+using APMApi.Models.Database.RequestModels;
+using APMApi.Models.Database.UserModels;
+using APMApi.Models.Dto.CategoryDto.ObjectDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +12,8 @@ namespace APMApi.Models.Database.SkillModels;
 [Table("Objects")]
 public class ObjectModel : IBaseModel<ObjectModel, ObjectCreateDto, ObjectUpdateDto>
 {
+    #region Fields
+
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,10 +25,28 @@ public class ObjectModel : IBaseModel<ObjectModel, ObjectCreateDto, ObjectUpdate
     [MaxLength(250)]
     public string Description { get; set; } = null!;
 
+
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
 
+    #endregion
+
+    #region Relations
+    
+    [Column("picture_id")] public Guid? PictureId { get; set; }
+    [ForeignKey(nameof(PictureId))] public Picture? Picture { get; }
+
+    [Column("category_id")] [ForeignKey(nameof(CategoryId))] public Guid? CategoryId { get; set; }
+    public ObjectCategory? Category { get; }
+    
+    public IEnumerable<User>? Users { get; }
+    public IEnumerable<Request>? Requests { get; }
+
+    #endregion
+
+    #region Methods
+    
     public static ObjectModel Create(ObjectCreateDto createDto)
     {
         return new ObjectModel
@@ -47,4 +70,6 @@ public class ObjectModel : IBaseModel<ObjectModel, ObjectCreateDto, ObjectUpdate
     {
         return context.Objects;
     }
+
+    #endregion
 }

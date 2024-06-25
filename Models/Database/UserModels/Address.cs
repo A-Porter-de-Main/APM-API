@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Models.Dto.UserModels.Address;
+using APMApi.Context;
+using APMApi.Models.Dto.UserModels.AddressDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,9 @@ namespace APMApi.Models.Database.UserModels;
 [Table("Addresses")]
 public class Address : IBaseModel<Address, AddressCreateDto, AddressUpdateDto>
 {
+    #region Fields
+
+    
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -16,7 +20,7 @@ public class Address : IBaseModel<Address, AddressCreateDto, AddressUpdateDto>
 
     [Column("street")] [MaxLength(50)] public string Street { get; set; } = null!;
 
-    [Column("floor")] public string? Floor { get; set; }
+    [Column("floor")] [MaxLength(50)] public string? Floor { get; set; }
 
     [Column("city")] [MaxLength(50)] public string City { get; set; } = null!;
 
@@ -25,11 +29,22 @@ public class Address : IBaseModel<Address, AddressCreateDto, AddressUpdateDto>
     [Column("latitude")] [MaxLength(50)] public string Latitude { get; set; } = null!;
 
     [Column("longitude")] [MaxLength(50)] public string Longitude { get; set; } = null!;
-
+    
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
 
+    #endregion
+
+    #region Relations
+
+    [Column("user_id")] public Guid UserId { get; set; }
+    [ForeignKey(nameof(UserId))] public User User { get; } = null!;
+
+    #endregion
+
+    #region Methods
+    
     public static Address Create(AddressCreateDto createDto)
     {
         return new Address
@@ -61,4 +76,6 @@ public class Address : IBaseModel<Address, AddressCreateDto, AddressUpdateDto>
     {
         return context.Addresses;
     }
+
+    #endregion
 }

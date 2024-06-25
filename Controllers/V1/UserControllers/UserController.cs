@@ -1,7 +1,6 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserModels.User;
-using APMApi.Models.Other;
+using APMApi.Models.Dto.UserModels.UserDto;
 using APMApi.Services.MainUsers.UserServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
@@ -55,12 +54,13 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
                 var id = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
                 if (id != null) return await _userService.GetById(Guid.Parse(id));
             }
+
             var visitorToken = _userService.GenerateVisitor();
             HttpContext.Response.Cookies.Append("dXNlclRva2Vu", visitorToken.Token);
             return visitorToken;
         });
     }
-    
+
     [HttpGet("logout")]
     public async Task<IActionResult> Logout()
     {
@@ -71,7 +71,7 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             return Task.FromResult(true);
         });
     }
-    
+
     [HttpGet("{id:guid}")]
     [Authorize("admin")]
     public override Task<IActionResult> GetById(Guid id)

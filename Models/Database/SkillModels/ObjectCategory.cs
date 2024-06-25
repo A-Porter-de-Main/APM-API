@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using APMApi.Models.Dto.CategoryModels.Type;
+using APMApi.Context;
+using APMApi.Models.Dto.CategoryDto.TypeDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,9 @@ namespace APMApi.Models.Database.SkillModels;
 [Table("ObjectCategories")]
 public class ObjectCategory : IBaseModel<ObjectCategory, ObjectCategoryCreateDto, ObjectCategoryUpdateDto>
 {
+    #region Fields
+
+    
     [Column("id")]
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -23,7 +27,25 @@ public class ObjectCategory : IBaseModel<ObjectCategory, ObjectCategoryCreateDto
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
     [Column("updated_at")] public DateTime UpdatedAt { get; set; }
+    
+    #endregion
 
+    #region Relations
+    
+    [Column("picture_id")] public Guid? PictureId { get; set; }
+    [ForeignKey(nameof(PictureId))] public Picture? Picture { get; }
+
+    [Column("parent_id")] [ForeignKey(nameof(ParentId))] public Guid? ParentId { get; set; }
+    public ObjectCategory? Parent { get; }
+
+    public IEnumerable<ObjectModel>? Objects { get; }
+    
+    public IEnumerable<ObjectCategory>? Children { get; }
+
+    #endregion
+
+    #region Methods
+    
     public static ObjectCategory Create(ObjectCategoryCreateDto createDto)
     {
         return new ObjectCategory
@@ -47,4 +69,6 @@ public class ObjectCategory : IBaseModel<ObjectCategory, ObjectCategoryCreateDto
     {
         return context.Types;
     }
+
+    #endregion
 }
