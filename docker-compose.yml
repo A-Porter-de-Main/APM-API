@@ -14,7 +14,7 @@ services:
       - Jwt__Issuer=${JWT_ISSUER}
       - Jwt__Audience=${JWT_AUDIENCE}
       - BUILD_CONFIGURATION=${BUILD_CONFIGURATION}
-      - Origins=${ORIGINS}
+      - Configurations__Origins=${ORIGINS}
   
   watchtower:
     image: containrrr/watchtower

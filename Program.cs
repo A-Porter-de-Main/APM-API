@@ -19,7 +19,7 @@ var audience = builder.Configuration.GetSection("Jwt:Audience").Get<string>() ??
                throw new Exception("Jwt:Audience not found in appsettings.json");
 var key = builder.Configuration.GetSection("Jwt:Key").Get<string>() ??
           throw new Exception("Jwt:Key not found in appsettings.json");
-var origins = builder.Configuration.GetSection("Origins").Get<string>() ??
+var origins = builder.Configuration.GetSection("Configurations:Origins").Get<string>() ??
              throw new Exception("Origins not found in appsettings.json");
 
 // Add services to the container.
