@@ -6,4 +6,6 @@ namespace APMApi.Services.MainRequests.ResponseServices;
 
 public interface IResponseService : IBaseService<Response, ResponseCreateDto, ResponseUpdateDto>
 {
+    public Task<IEnumerable<Response>> GetAllScopedUser(Guid userId);
+    public Task<IEnumerable<Response>> GetAllScopedRequest(Guid requestId);
 }

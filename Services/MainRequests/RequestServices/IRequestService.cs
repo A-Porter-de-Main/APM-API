@@ -6,4 +6,5 @@ namespace APMApi.Services.MainRequests.RequestServices;
 
 public interface IRequestService : IBaseService<Request, RequestCreateDto, RequestUpdateDto>
 {
+    public Task<IEnumerable<Request>> GetAllScopedUser(Guid userId);
 }

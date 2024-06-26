@@ -35,6 +35,7 @@ public class Chat : IBaseModel<Chat, ChatCreateDto, ChatUpdateDto>
     {
         return new Chat
         {
+            ResponseId = createDto.ResponseId,
             CreatedAt = DateTime.Now
         };
     }

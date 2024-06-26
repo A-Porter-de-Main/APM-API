@@ -81,7 +81,10 @@ public class RequestService : BaseService<Request, RequestCreateDto, RequestUpda
             .FirstOrDefaultAsync(r => r.Id == id);
     }
 
+    public async Task<IEnumerable<Request>> GetAllScopedUser(Guid userId)
+    {
+        return await _context.Requests.Where(r => r.UserId == userId).ToListAsync();
+    }
+
     #endregion
-    
-    
 }

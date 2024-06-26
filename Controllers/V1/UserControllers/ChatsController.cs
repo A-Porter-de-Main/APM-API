@@ -15,4 +15,9 @@ public class ChatsController : ControllerBaseExtended<Chat, ChatCreateDto, ChatU
     public ChatsController(IChatService service) : base(service)
     {
     }
+    
+    public override Task<IActionResult> Update(Guid id, ChatUpdateDto updateDto)
+    {
+        return Task.FromResult<IActionResult>(BadRequest("Update method is not implemented"));
+    }
 }

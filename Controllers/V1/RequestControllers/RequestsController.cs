@@ -30,6 +30,27 @@ public class RequestController : ControllerBaseExtended<Request, RequestCreateDt
         _fileService = fileService;
     }
 
+    [HttpGet]
+    [Authorize("admin")]
+    public override Task<IActionResult> GetAll()
+    {
+        return base.GetAll();
+    }
+    
+    [HttpGet("user/{id:guid}")]
+    [Authorize("user")]
+    public Task<IActionResult> GetAllScopedUser(Guid id)
+    {
+        return TryExecuteControllerTask(async () =>
+        {
+            if (User.Identity?.IsAuthenticated == false) throw new Exception("User is not authenticated");
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value!;
+            if (id != Guid.Parse(userId)) throw new Exception("You are not allowed to get responses of this user");
+            
+            return await _requestService.GetAllScopedUser(id);
+        });
+    }
+    
     [HttpGet("{id:guid}")]
     [Authorize("user")]
     public override Task<IActionResult> GetById(Guid id)

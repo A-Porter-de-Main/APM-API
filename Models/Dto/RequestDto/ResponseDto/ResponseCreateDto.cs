@@ -6,7 +6,7 @@ public class ResponseCreateDto : IDataTransferObject
 {
     public string Description { get; set; } = null!;
     public Guid RequestId { get; set; }
-    public Guid UserId { get; set; }
+    internal Guid? UserId { get; set; }
 
     public async Task Validate()
     {

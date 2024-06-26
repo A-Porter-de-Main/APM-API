@@ -5,6 +5,7 @@ using APMApi.Models.Other;
 using APMApi.Services.Other.BaseServices;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 
 namespace APMApi.Helpers;
 
@@ -56,6 +57,15 @@ public class ControllerBaseExtended<T, TCreateDto, TUpdateDto, TService> : Contr
             Debug.WriteLine(e.Message);
             return StatusCode(500, "Internal Server Error");
         }
+    }
+    
+    protected void CreateCookie(string key, string value)
+    {
+        // var cookieToCreate = new CookieHeaderValue(key, value);
+        // cookieToCreate = Request.RequestUri.Host;
+        // cookieToCreate.Path = "/";
+        //
+        // resp.Headers.AddCookies(new CookieHeaderValue[] { cookie });
     }
 
     protected string ParseSqlExceptionMessage(Exception e)
