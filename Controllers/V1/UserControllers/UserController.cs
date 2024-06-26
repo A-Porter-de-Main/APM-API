@@ -67,7 +67,7 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
                     HttpContext.Response.Cookies.Append("dXNlclRva2Vu", token.Token);
                     
                     if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
-                    return user;
+                    return new { token, user };
                 }
             }
 
