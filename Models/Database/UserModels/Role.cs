@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using APMApi.Models.Dto.UserDto.RoleDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace APMApi.Models.Database.UserModels;
 
 [Table("Roles")]
+[Index(nameof(Name), IsUnique = true)]
 public class Role : IBaseModel<Role, RoleCreateDto, RoleUpdateDto>
 {
     #region Fields
@@ -19,12 +21,12 @@ public class Role : IBaseModel<Role, RoleCreateDto, RoleUpdateDto>
     [Column("name")] [MaxLength(50)] public string Name { get; set; } = null!;
 
     [Column("created_at")] public DateTime CreatedAt { get; init; }
-
     
     #endregion
 
     #region Relations
     
+    [JsonIgnore]
     public IEnumerable<User>? Users { get; set; }
 
     #endregion

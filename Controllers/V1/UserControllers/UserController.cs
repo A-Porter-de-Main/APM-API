@@ -1,6 +1,5 @@
 using APMApi.Helpers;
 using APMApi.Models.Database.UserModels;
-using APMApi.Models.Dto.UserDto.AddressDto;
 using APMApi.Models.Dto.UserDto.UserDto;
 using APMApi.Models.Exception;
 using APMApi.Services.MainUsers.AddressServices;
@@ -8,9 +7,7 @@ using APMApi.Services.MainUsers.UserServices;
 using APMApi.Services.Other.FileServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace APMApi.Controllers.V1.UserControllers;
 
@@ -23,7 +20,6 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
 
     private readonly IUserService _userService;
     private readonly IFileService _fileService;
-    private readonly IAddressService _addressService;
 
     #endregion
 
@@ -31,12 +27,10 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
 
     public UserController(
         IUserService userService,
-        IFileService fileService,
-        IAddressService addressService
+        IFileService fileService
     ) : base(userService) {
         _userService = userService;
         _fileService = fileService;
-        _addressService = addressService;
     }
 
     #endregion
@@ -62,15 +56,22 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
     {
         return await TryExecuteControllerTask<dynamic>(async () =>
         {
-            if (User.Identity?.IsAuthenticated == true)
+            var id = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            if (User.Identity?.IsAuthenticated == true && id != null)
             {
-                var id = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-                var user = await _userService.GetById(Guid.Parse(id!)) ?? throw new NotFoundException("User not found");
-                if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
-                return user;
+                var user = await _userService.GetById(Guid.Parse(id));
+                if (user != null)
+                {
+                    var token = _userService.GenerateToken(user);
+                    if (token == null) throw new Exception("Impossible to login");
+                    HttpContext.Response.Cookies.Append("dXNlclRva2Vu", token.Token);
+                    
+                    if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
+                    return user;
+                }
             }
 
-            var visitorToken = _userService.GenerateVisitor();
+            var visitorToken = _userService.GenerateToken();
             HttpContext.Response.Cookies.Append("dXNlclRva2Vu", visitorToken.Token);
             return visitorToken;
         });
@@ -84,7 +85,7 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             if (User.Identity?.IsAuthenticated == false) throw new Exception("User is not authenticated");
             HttpContext.Response.Cookies.Delete("dXNlclRva2Vu");
             
-            var visitorToken = _userService.GenerateVisitor();
+            var visitorToken = _userService.GenerateToken();
             HttpContext.Response.Cookies.Append("dXNlclRva2Vu", visitorToken.Token);
             return Task.FromResult(visitorToken);
         });
@@ -113,22 +114,10 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             if (createDto.Image == null) throw new Exception("Image is required");
             createDto.ImagePath = await _fileService.AddDocument(createDto.Image);
             
-            var password = createDto.Password;
             await ValidateDto(createDto);
             var user = await _userService.Create(createDto);
-
-            if (createDto.Address != null)
-            {
-                createDto.Address.UserId = user.Id;
-                var address = await _addressService.Create(createDto.Address);
-                user.Addresses = new List<Address> { address };
-            }
             
-            var token = await _userService.Login(new UserLoginDto
-            {
-                Email = createDto.Email,
-                Password = password
-            });
+            var token = _userService.GenerateToken(user);
             if (token == null) throw new Exception("Impossible to login");
             HttpContext.Response.Cookies.Append("dXNlclRva2Vu", token.Token);
             
@@ -151,7 +140,6 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             await ValidateDto(updateDto);
 
             if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
-
             
             return await _userService.Update(id, updateDto);
         });

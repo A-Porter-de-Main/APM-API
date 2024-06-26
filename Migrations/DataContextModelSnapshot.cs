@@ -555,7 +555,24 @@ namespace APMApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000002"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "user"
+                        });
                 });
 
             modelBuilder.Entity("APMApi.Models.Database.UserModels.User", b =>
@@ -633,6 +650,21 @@ namespace APMApi.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("00000000-0000-0000-0000-000000000001"),
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@apm.com",
+                            FirstName = "John",
+                            LastName = "Doe",
+                            Password = "$2a$05$NRO5/bKU4KzX6wAAsGppz.YTywGfKEwD83Jj8pdB7wkRrCIElTvQK",
+                            Phone = "060000000000",
+                            PicturePath = "https://cours-informatique-gratuit.fr/wp-content/uploads/2014/05/administrateur.png",
+                            RoleId = new Guid("00000000-0000-0000-0000-000000000001"),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("ObjectModelRequest", b =>

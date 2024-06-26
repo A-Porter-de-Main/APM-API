@@ -1,3 +1,4 @@
+using Microsoft.IdentityModel.Tokens;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
@@ -25,14 +26,14 @@ public class FileService : IFileService
     // Update a document
     public async Task<string> UpdateDocument(IFormFile file, string previous)
     {
-        if (!previous.StartsWith("http")) DeleteDocument(previous);
+        DeleteDocument(previous);
         return await AddDocument(file);
     }
 
     // Delete a document
     public void DeleteDocument(string previous)
     {
-        if (previous.StartsWith("http")) return;
+        if (previous.StartsWith("http") || previous.IsNullOrEmpty()) return;
         var basePath = GetDocumentByLink(previous);
         var path = Path.Combine(Directory.GetCurrentDirectory(), basePath);
         File.Delete(path);

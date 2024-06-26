@@ -36,56 +36,67 @@ public class UserService : BaseService<User, UserCreateDto, UserUpdateDto>, IUse
     public override async Task<User> Create(UserCreateDto createDto)
     {
         createDto.Password = BCrypt.Net.BCrypt.HashPassword(createDto.Password, 5);
-        return await base.Create(createDto);
+        var role = await _context.Roles.FirstOrDefaultAsync(s => s.Name == "user");
+
+        var result = await _context.Users.AddAsync(new User
+        {
+            FirstName = createDto.FirstName,
+            LastName = createDto.LastName,
+            Email = createDto.Email,
+            Phone = createDto.Phone,
+            Password = createDto.Password,
+            PicturePath = createDto.ImagePath ?? "",
+            RoleId = role?.Id,
+            Role = role?.Id == null ? new Role
+            {
+                Name = "user"
+            } : null,
+            Addresses = createDto.Address != null
+                ? new[]
+                {
+                    createDto.Address.ConvertToAddress()
+                }
+                : null,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        });
+        
+        await _context.SaveChangesAsync();
+        return result.Entity;
     }
 
     public async Task<TokenResponse?> Login(UserLoginDto userLoginDto)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(su => su.Email == userLoginDto.Email);
+        var user = await _context.Users.Include(s => s.Role).FirstOrDefaultAsync(su => su.Email == userLoginDto.Email);
         if (user == null) throw new NotFoundException("User not found");
 
         if (!BCrypt.Net.BCrypt.Verify(userLoginDto.Password, user.Password)) throw new Exception("Invalid password");
 
-        var key = _config.GetSection("Jwt:Key").Get<string>() ??
-                  throw new Exception("Jwt:Key not found in appsettings.json");
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        var claims = new[]
-        {
-            new Claim("id", user.Id.ToString()),
-            new Claim("name", user.Email),
-            new Claim("role", "admin"),
-            new Claim(ClaimTypes.Role, "admin")
-        };
-
-        var token = new JwtSecurityToken(
-            _config["Jwt:Issuer"],
-            _config["Jwt:Issuer"],
-            claims,
-            expires: DateTime.Now.AddMinutes(120),
-            signingCredentials: credentials
-        );
-
-        return new TokenResponse
-        {
-            Token = new JwtSecurityTokenHandler().WriteToken(token),
-            Expires = token.ValidTo
-        };
+        return GenerateToken(user);
     }
 
-    public TokenResponse GenerateVisitor()
+    public TokenResponse GenerateToken(User? user = null)
     {
+        if (user is { Role: null }) throw new Exception("User role not found");
+        
         var key = _config.GetSection("Jwt:Key").Get<string>() ??
                   throw new Exception("Jwt:Key not found in appsettings.json");
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
-        {
-            new Claim("role", "visitor"),
-            new Claim(ClaimTypes.Role, "visitor")
-        };
+        var claims = user == null ?
+            new[]
+            {
+                new Claim("role", "visitor"),
+                new Claim(ClaimTypes.Role, "visitor")
+            } :
+            new[]
+            {
+                new Claim("id", user.Id.ToString()),
+                new Claim("name", user.Email),
+                new Claim("role", user.Role.Name),
+                new Claim(ClaimTypes.Role, user.Role.Name)
+            };
 
         var token = new JwtSecurityToken(
             _config["Jwt:Issuer"],
@@ -108,10 +119,7 @@ public class UserService : BaseService<User, UserCreateDto, UserUpdateDto>, IUse
             .Include(s => s.Addresses)
             .Include(s => s.Preference)
             .Include(s => s.Skills)
-            .Include(s => s.FeedBacks)
-            .Include(s => s.FeedBackApplications)
-            .Include(s => s.Issues)
-            .Include(s => s.Objects)
+            .Include(s => s.Role)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
 

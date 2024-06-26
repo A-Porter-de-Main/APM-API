@@ -1,3 +1,4 @@
+using APMApi.Helpers;
 using APMApi.Models.Database;
 using APMApi.Models.Database.FeedBackModels;
 using APMApi.Models.Database.RequestModels;
@@ -20,11 +21,9 @@ public class DataContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
         
-        
-        // var dataSeeder = new DataSeeder(modelBuilder);
-        // dataSeeder.Seed();
+        var dataSeeder = new DataSeeder(modelBuilder);
+        dataSeeder.Seed();
     }
 
     /// <summary>

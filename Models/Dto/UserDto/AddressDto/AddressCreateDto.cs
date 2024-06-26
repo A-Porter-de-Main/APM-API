@@ -4,7 +4,7 @@ namespace APMApi.Models.Dto.UserDto.AddressDto;
 
 public class AddressCreateDto : IDataTransferObject
 {
-    public Guid? UserId { get; set; }
+    public Guid UserId { get; set; }
     public string Street { get; set; } = null!;
     public string City { get; set; } = null!;
     public string ZipCode { get; set; } = null!;

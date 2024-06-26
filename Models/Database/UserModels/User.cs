@@ -49,8 +49,8 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
     
     #region Relations
     
-    [Column("role_id")] public Guid? RoleId { get; set; }
-    [ForeignKey(nameof(RoleId))] public Role? Role { get; set; }
+    [JsonIgnore] [Column("role_id")] public Guid? RoleId { get; set; }
+    [JsonIgnore] [ForeignKey(nameof(RoleId))] public Role? Role { get; set; }
     
     public IEnumerable<Address>? Addresses { get; set; }
     public Preference? Preference { get; set; }

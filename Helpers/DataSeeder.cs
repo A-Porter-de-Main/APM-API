@@ -35,10 +35,12 @@ public class DataSeeder
                 LastName = "Doe",
                 PicturePath = "https://cours-informatique-gratuit.fr/wp-content/uploads/2014/05/administrateur.png",
                 Email = "admin@apm.com",
+                Phone = "060000000000",
                 Password = BCrypt.Net.BCrypt.HashPassword("motDePasse", 5),
                 RoleId = Guid.Parse("00000000-0000-0000-0000-000000000001")
             }
         });
+        _modelBuilder.Entity<User>().HasData(_users);
     }
 
     private void GenerateRoles()
