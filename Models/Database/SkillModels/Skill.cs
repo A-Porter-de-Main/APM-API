@@ -24,7 +24,7 @@ public class Skill : IBaseModel<Skill, SkillCreateDto, SkillUpdateDto>
     [MaxLength(250)]
     public string Description { get; set; } = null!;
     
-    [Column("picture_path")] [MaxLength(150)] public string PicturePath { get; set; } = null!;
+    [Column("picture_path")] [MaxLength(150)] public string? PicturePath { get; set; }
     
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 
@@ -34,6 +34,10 @@ public class Skill : IBaseModel<Skill, SkillCreateDto, SkillUpdateDto>
 
     #region Relations
 
+    [Column("parent_id")] public Guid? ParentId { get; set; }
+    [ForeignKey(nameof(ParentId))] public Skill? Parent { get; set; }
+    
+    public IEnumerable<Skill>? Children { get; set; }
     public IEnumerable<User>? Users { get; set; }
     public IEnumerable<Request>? Requests { get; set; }
     

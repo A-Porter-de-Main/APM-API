@@ -11,11 +11,9 @@ public class Picture
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; init; }
 
+    [Column("name")] [MaxLength(50)] public string Name { get; set; } = null!;
+    
     [Column("path")] [MaxLength(250)] public string Path { get; set; } = null!;
-
-    [Column("description")]
-    [MaxLength(250)]
-    public string? Description { get; set; }
 
     [Column("created_at")] public DateTime CreatedAt { get; init; }
 

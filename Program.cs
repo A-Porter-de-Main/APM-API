@@ -95,7 +95,7 @@ builder.Services.AddAuthorization(options =>
         policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
         policy.RequireAuthenticatedUser();
         policy.RequireClaim("id");
-        policy.RequireClaim(ClaimTypes.Role, "user");
+        policy.RequireClaim(ClaimTypes.Role, "user", "admin");
     });
     options.AddPolicy("admin", policy =>
     {

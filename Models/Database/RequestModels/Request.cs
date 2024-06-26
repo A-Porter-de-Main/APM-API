@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using APMApi.Models.Database.SkillModels;
 using APMApi.Models.Dto.RequestDto.RequestDto;
 using APMApi.Models.Other;
@@ -17,10 +18,16 @@ public class Request : IBaseModel<Request, RequestCreateDto, RequestUpdateDto>
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; init; }
 
+    [Column("title")]
+    [MaxLength(50)]
+    public string Title { get; set; } = null!;
+    
     [Column("description")]
     [MaxLength(250)]
     public string Description { get; set; } = null!;
 
+    [NotMapped] public string? StatusName => Status?.Name;
+    
     [Column("deadline")] public DateTime Deadline { get; set; }
     
     [Column("created_at")] public DateTime CreatedAt { get; init; }
@@ -31,8 +38,8 @@ public class Request : IBaseModel<Request, RequestCreateDto, RequestUpdateDto>
     
     #region Relations
 
-    [Column("status_id")] public Guid? StatusId { get; set; }
-    [ForeignKey(nameof(StatusId))] public Status? Status { get; set; }
+    [JsonIgnore] [Column("status_id")] public Guid? StatusId { get; set; }
+    [JsonIgnore] [ForeignKey(nameof(StatusId))] public Status? Status { get; set; }
     
     public IEnumerable<Picture>? Pictures { get; set; }
     
@@ -50,6 +57,7 @@ public class Request : IBaseModel<Request, RequestCreateDto, RequestUpdateDto>
     {
         return new Request
         {
+            Title = createDto.Title,
             Description = createDto.Description,
             Deadline = createDto.Deadline,
             CreatedAt = DateTime.Now,

@@ -31,6 +31,8 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
 
     [Column("email")] [MaxLength(250)] public string Email { get; set; } = null!;
 
+    [NotMapped] public string? RoleName => Role?.Name;
+    
     [Column("phone")] [MaxLength(20)] public string Phone { get; set; } = null!;
 
     [Column("password")]
