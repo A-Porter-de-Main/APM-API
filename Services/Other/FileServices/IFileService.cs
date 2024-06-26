@@ -8,11 +8,13 @@ public interface IFileService
     public Task<IEnumerable<Picture>> AddMultipleDocuments(IEnumerable<IFormFile> files);
     public Task<string> UpdateDocument(IFormFile file, string previous);
     public void DeleteDocument(string previous);
+    public void DeleteManyDocuments(IEnumerable<Picture> pictures);
     public string GetDocumentByLink(string fileName);
     public string GetContentType(string fileName);
 
     public string GetRightUrl(HttpRequest request, string fileName)
     {
+        if (fileName.StartsWith("http")) return fileName;
         var url = $"{request.Scheme}://{request.Host}";
         return $"{url}/{fileName}";
     }

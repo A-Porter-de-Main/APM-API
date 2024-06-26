@@ -94,6 +94,14 @@ public class FileService : IFileService
             Directory.Delete(Path.GetDirectoryName(path)!);
     }
 
+    public void DeleteManyDocuments(IEnumerable<Picture> pictures)
+    {
+        foreach (var picture in pictures)
+        {
+            DeleteDocument(picture.Path);
+        }
+    }
+
     public string GetDocumentByLink(string fileName)
     {
         var name = fileName.Split("?fileName=").Last();

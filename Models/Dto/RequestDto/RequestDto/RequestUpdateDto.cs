@@ -1,12 +1,16 @@
+using APMApi.Models.Database;
 using FluentValidation;
 
 namespace APMApi.Models.Dto.RequestDto.RequestDto;
 
 public class RequestUpdateDto : IDataTransferObject
 {
-    public string Description { get; set; } = null!;
-    public DateTime Deadline { get; set; }
-    public Guid? PictureId { get; set; }
+    public string? Title { get; set; } = null!;
+    public string? Description { get; set; } = null!;
+    public DateTime? Deadline { get; set; }
+    public IEnumerable<IFormFile>? Pictures { get; set; } = null!;
+    internal IEnumerable<Picture>? PicturesCreated { get; set; }
+    public IEnumerable<Guid>? Skills { get; set; } = null!;
 
     public async Task Validate()
     {
@@ -18,9 +22,11 @@ public class RequestUpdateDto : IDataTransferObject
     {
         public Validator()
         {
-            RuleFor(s => s.Description).NotEmpty().MaximumLength(500);
-            RuleFor(s => s.Deadline).NotEmpty();
-            RuleFor(s => s.PictureId).NotEmpty();
+            RuleFor(s => s.Title).MaximumLength(50);
+            RuleFor(s => s.Description).MaximumLength(500);
+            RuleFor(s => s.PicturesCreated);
+            RuleFor(s => s.Skills);
+            RuleFor(s => s.Deadline);
         }
     }
 }

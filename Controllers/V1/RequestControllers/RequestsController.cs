@@ -1,11 +1,14 @@
 using APMApi.Helpers;
+using APMApi.Models.Database;
 using APMApi.Models.Database.RequestModels;
 using APMApi.Models.Dto.RequestDto.RequestDto;
+using APMApi.Models.Exception;
 using APMApi.Services.MainRequests.RequestServices;
 using APMApi.Services.Other.FileServices;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace APMApi.Controllers.V1.RequestControllers;
 
@@ -27,6 +30,24 @@ public class RequestController : ControllerBaseExtended<Request, RequestCreateDt
         _fileService = fileService;
     }
 
+    [HttpGet("{id:guid}")]
+    [Authorize("user")]
+    public override Task<IActionResult> GetById(Guid id)
+    {
+        return TryExecuteControllerTask(async () =>
+        {
+            var result = await _requestService.GetById(id);
+            if (result == null) throw new NotFoundException("Request not found");
+            
+            result.Pictures = result.Pictures?.Select(p => new Picture
+            {
+                Id = p.Id,
+                Path = _fileService.GetRightUrl(HttpContext.Request, p.Path)
+            });
+            return result;
+        });
+    }
+
     [HttpPost]
     [Authorize("user")]
     public override Task<IActionResult> Create([FromForm] RequestCreateDto createDto)
@@ -39,7 +60,57 @@ public class RequestController : ControllerBaseExtended<Request, RequestCreateDt
             createDto.PicturesCreated = await _fileService.AddMultipleDocuments(createDto.Pictures);
             
             await ValidateDto(createDto);
-            return await _requestService.Create(createDto);
+            var result = await _requestService.Create(createDto);
+            result.Pictures = result.Pictures?.Select(p => new Picture
+            {
+                Id = p.Id,
+                Path = _fileService.GetRightUrl(HttpContext.Request, p.Path)
+            });
+            return result;
+        });
+    }
+
+    [HttpPut("{id:guid}")]
+    [Authorize("user")]
+    public override Task<IActionResult> Update(Guid id, [FromForm] RequestUpdateDto updateDto)
+    {
+        return TryExecuteControllerTask(async () =>
+        {
+            if (User.Identity?.IsAuthenticated == false) throw new Exception("User is not authenticated");
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value!;
+            var request = await _requestService.GetById(id) ?? throw new NotFoundException("Request not found");
+            if (request.UserId != Guid.Parse(userId)) throw new Exception("User is not owner of this request");
+
+            if (updateDto.Pictures.IsNullOrEmpty()) return await _requestService.Update(id, updateDto);
+            _fileService.DeleteManyDocuments(request.Pictures!);
+            updateDto.PicturesCreated = await _fileService.AddMultipleDocuments(updateDto.Pictures!);
+            
+            var result = await _requestService.Update(id, updateDto);
+            if (result == null) throw new Exception("Request not updated");
+            
+            result.Pictures = result.Pictures?.Select(p => new Picture
+            {
+                Id = p.Id,
+                Path = _fileService.GetRightUrl(HttpContext.Request, p.Path)
+            });
+            return result;
+        });
+    }
+    
+    [HttpDelete("{id:guid}")]
+    [Authorize("user")]
+    public override Task<IActionResult> Delete(Guid id)
+    {
+        return TryExecuteControllerTask(async () =>
+        {
+            if (User.Identity?.IsAuthenticated == false) throw new Exception("User is not authenticated");
+            var userId = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value!;
+            var request = await _requestService.GetById(id) ?? throw new NotFoundException("Request not found");
+            
+            if (request.UserId != Guid.Parse(userId)) throw new Exception("User is not owner of this request");
+            _fileService.DeleteManyDocuments(request.Pictures!);
+            
+            return await _requestService.Delete(id);
         });
     }
 }

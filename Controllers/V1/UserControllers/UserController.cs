@@ -2,7 +2,6 @@ using APMApi.Helpers;
 using APMApi.Models.Database.UserModels;
 using APMApi.Models.Dto.UserDto.UserDto;
 using APMApi.Models.Exception;
-using APMApi.Services.MainUsers.AddressServices;
 using APMApi.Services.MainUsers.UserServices;
 using APMApi.Services.Other.FileServices;
 using Asp.Versioning;
@@ -66,7 +65,7 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
                     if (token == null) throw new Exception("Impossible to login");
                     HttpContext.Response.Cookies.Append("dXNlclRva2Vu", token.Token);
                     
-                    if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
+                    user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
                     return new { token, user };
                 }
             }
@@ -121,7 +120,7 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             if (token == null) throw new Exception("Impossible to login");
             HttpContext.Response.Cookies.Append("dXNlclRva2Vu", token.Token);
             
-            if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
+            user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
 
             return user;
         });
@@ -139,7 +138,7 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             if (updateDto.Image != null) updateDto.ImagePath = await _fileService.UpdateDocument(updateDto.Image, user.PicturePath);
             await ValidateDto(updateDto);
 
-            if (!user.PicturePath.StartsWith("http")) user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
+            user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
             
             return await _userService.Update(id, updateDto);
         });

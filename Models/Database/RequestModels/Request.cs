@@ -71,8 +71,9 @@ public class Request : IBaseModel<Request, RequestCreateDto, RequestUpdateDto>
 
     public Request Update(RequestUpdateDto updateDto)
     {
-        Description = updateDto.Description;
-        Deadline = updateDto.Deadline;
+        Title = updateDto.Title ?? Title;
+        Description = updateDto.Description ?? Description;
+        Deadline = updateDto.Deadline ?? Deadline;
         UpdatedAt = DateTime.Now;
         return this;
     }
