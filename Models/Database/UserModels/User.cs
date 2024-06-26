@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using APMApi.Models.Database.FeedBackModels;
+using APMApi.Models.Database.RequestModels;
 using APMApi.Models.Database.SkillModels;
 using APMApi.Models.Dto.UserDto.UserDto;
 using APMApi.Models.Other;
@@ -56,6 +57,7 @@ public class User : IBaseModel<User, UserCreateDto, UserUpdateDto>
     
     public IEnumerable<Address>? Addresses { get; set; }
     public Preference? Preference { get; set; }
+    public IEnumerable<Request>? Requests { get; set; }
     public IEnumerable<Skill>? Skills { get; set; }
     public IEnumerable<FeedBack>? FeedBacks { get; set; }
     public IEnumerable<FeedBackApplication>? FeedBackApplications { get; set; }

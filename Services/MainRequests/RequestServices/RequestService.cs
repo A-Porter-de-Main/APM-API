@@ -42,6 +42,7 @@ public class RequestService : BaseService<Request, RequestCreateDto, RequestUpda
             Pictures = createDto.PicturesCreated,
             Skills = skills,
             Deadline = createDto.Deadline,
+            UserId = createDto.UserId,
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
         });

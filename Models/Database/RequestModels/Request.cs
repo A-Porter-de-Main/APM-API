@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using APMApi.Models.Database.SkillModels;
+using APMApi.Models.Database.UserModels;
 using APMApi.Models.Dto.RequestDto.RequestDto;
 using APMApi.Models.Other;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,9 @@ public class Request : IBaseModel<Request, RequestCreateDto, RequestUpdateDto>
     
     #region Relations
 
+    [JsonIgnore] [Column("user_id")] public Guid? UserId { get; set; }
+    [JsonIgnore] [ForeignKey(nameof(UserId))] public User? User { get; set; }
+    
     [JsonIgnore] [Column("status_id")] public Guid? StatusId { get; set; }
     [JsonIgnore] [ForeignKey(nameof(StatusId))] public Status? Status { get; set; }
     
