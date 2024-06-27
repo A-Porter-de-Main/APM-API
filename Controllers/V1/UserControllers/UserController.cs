@@ -126,6 +126,26 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
         });
     }
 
+    [HttpPut("self")]
+    [Authorize("user")]
+    public Task<IActionResult> UpdateSelf(UserUpdateDto updateDto)
+    {
+        return TryExecuteControllerTask(async () =>
+        {
+            var id = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            if (User.Identity?.IsAuthenticated == false || id == null) throw new Exception("User is not authenticated");
+            var user = await _userService.GetById(Guid.Parse(id));
+            if (user == null) throw new NotFoundException("User not found");
+            
+            if (updateDto.Image != null) updateDto.ImagePath = await _fileService.UpdateDocument(updateDto.Image, user.PicturePath);
+            await ValidateDto(updateDto);
+
+            user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
+            
+            return await _userService.Update(Guid.Parse(id), updateDto);
+        });
+    }
+
     [HttpPut("{id:guid}")]
     [Authorize("admin")]
     public override Task<IActionResult> Update(Guid id, UserUpdateDto updateDto)
@@ -141,6 +161,22 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             user.PicturePath = _fileService.GetRightUrl(HttpContext.Request, user.PicturePath);
             
             return await _userService.Update(id, updateDto);
+        });
+    }
+    
+    [HttpDelete("self")]
+    [Authorize("user")]
+    public Task<IActionResult> DeleteSelf()
+    {
+        return TryExecuteControllerTask(async () =>
+        {
+            var id = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            if (User.Identity?.IsAuthenticated == false || id == null) throw new Exception("User is not authenticated");
+            var user = await _userService.GetById(Guid.Parse(id));
+            if (user == null) throw new NotFoundException("User not found");
+
+            _fileService.DeleteDocument(user.PicturePath);
+            return await _userService.Delete(Guid.Parse(id));
         });
     }
 
