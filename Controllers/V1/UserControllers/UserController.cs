@@ -175,8 +175,13 @@ public class UserController : ControllerBaseExtended<User, UserCreateDto, UserUp
             var user = await _userService.GetById(Guid.Parse(id));
             if (user == null) throw new NotFoundException("User not found");
 
+            HttpContext.Response.Cookies.Delete("dXNlclRva2Vu");
+            
             _fileService.DeleteDocument(user.PicturePath);
-            return await _userService.Delete(Guid.Parse(id));
+            
+            var visitorToken = _userService.GenerateToken();
+            HttpContext.Response.Cookies.Append("dXNlclRva2Vu", visitorToken.Token);
+            return Task.FromResult(visitorToken);
         });
     }
 
