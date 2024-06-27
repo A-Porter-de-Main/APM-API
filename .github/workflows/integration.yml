@@ -1,9 +1,6 @@
 name: Test et déploiement
 run-name: ${{ github.actor }} est en train de tester et de déployer l'application via docker
-
-on: 
-  release:
-    types: [published]
+on: [ push ]
 
 env:
   REGISTRY: ghcr.io
